@@ -1,1 +1,1 @@
-AttendIQ - A Facial Recognition Based Student Registration and Attendance System
+AttendIQ - A Facial Recognition Based Student Registration and Attendance System.
