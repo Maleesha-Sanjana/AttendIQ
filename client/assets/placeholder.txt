@@ -1,0 +1,6 @@
+# Assets Folder
+Place your cinec.png logo file here: client/assets/cinec.png
+
+After adding your logo:
+1. Uncomment the import line in LandingPage.jsx
+2. Replace the star (★) with the img tag

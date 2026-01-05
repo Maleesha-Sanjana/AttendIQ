@@ -1,0 +1,16 @@
+{
+  "name": "attendiq-frontend",
+  "version": "1.0.0",
+  "description": "Facial Recognition Based Student Registration and Attendance System - Frontend Template",
+  "main": "client/src/main.jsx",
+  "scripts": {
+    "install-deps": "cd client && npm install",
+    "dev": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "preview": "cd client && npm run preview",
+    "setup": "cd client && npm install && npm run dev"
+  },
+  "keywords": ["attendance", "facial-recognition", "react", "template"],
+  "author": "AttendIQ Team",
+  "license": "MIT"
+}
