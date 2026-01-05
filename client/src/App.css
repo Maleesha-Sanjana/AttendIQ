@@ -5,6 +5,7 @@
   padding: 0;
   text-align: left;
   position: relative;
+  background: linear-gradient(180deg, #000000 0%, #000000 35%, #666666 100%);
 }
 
 .App {
@@ -12,4 +13,5 @@
   height: 100%;
   overflow: hidden;
   position: relative;
+  background: linear-gradient(180deg, #000000 0%, #000000 35%, #666666 100%);
 }
