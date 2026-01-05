@@ -15,9 +15,11 @@
   padding: 2rem;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 2rem;
   z-index: 1;
   position: relative;
+  height: 100vh;
 }
 
 .brand-section {
@@ -27,7 +29,7 @@
 .brand-title {
   font-size: 2.5rem;
   font-weight: 700;
-  background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+  background: linear-gradient(180deg, #0043FF 0%, #527FFF 66%, #FFFFFF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -36,21 +38,26 @@
 }
 
 .brand-subtitle {
-  color: #ffffff;
+  background: linear-gradient(180deg, #8EEBFF 0%, #FFFFFF 67%, #FFFFFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   font-size: 0.9rem;
   font-weight: 400;
   letter-spacing: 1px;
 }
 
 .institution-logo {
-  margin-top: 2rem;
+  margin-top: auto;
+  margin-bottom: 2rem;
 }
 
 .logo-container {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
+  margin-left: 20px;
 }
 
 .cinec-main-logo {
@@ -107,7 +114,7 @@
 }
 
 .date-time-section {
-  margin-top: auto;
+  /* This will be positioned at the very bottom */
 }
 
 .date-time-card {
@@ -131,13 +138,14 @@
 
 .time {
   color: #ffffff;
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.1rem;
+  font-weight: 800;
 }
 
 .date {
-  color: #a0a0a0;
-  font-size: 0.9rem;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
 }
 
 /* Main Content Styles */
