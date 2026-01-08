@@ -1,73 +1,131 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { 
-  BookOpen, 
-  Calendar, 
-  Users, 
-  Clock, 
-  CheckCircle, 
-  XCircle,
-  BarChart3,
-  Plus
+  BarChart3, 
+  TrendingUp, 
+  FileText, 
+  Settings, 
+  User,
+  Sun,
+  Search,
+  Calendar,
+  Download
 } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { mockApi } from '../services/mockApi'
 import './Dashboard.css'
 
 const LecturerDashboard = () => {
-  const [courses, setCourses] = useState([])
-  const [upcomingSessions, setUpcomingSessions] = useState([])
-  const [recentAttendance, setRecentAttendance] = useState([])
-  const [stats, setStats] = useState({
-    totalStudents: 0,
-    totalCourses: 0,
-    totalSessions: 0,
-    averageAttendance: 0
-  })
+  const navigate = useNavigate()
+  const [currentTime, setCurrentTime] = useState(new Date())
+  const [activeTab, setActiveTab] = useState(0)
+  const [attendanceData, setAttendanceData] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const loadDashboardData = async () => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date())
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    const loadAttendanceData = async () => {
       try {
         setLoading(true)
-        
-        // Load all dashboard data using mock API
-        const [coursesResponse, sessionsResponse, attendanceResponse] = await Promise.all([
-          mockApi.getLecturerCourses(),
-          mockApi.getUpcomingSessions(),
-          mockApi.getRecentSessionAttendance()
-        ])
-
-        setCourses(coursesResponse.courses)
-        setUpcomingSessions(sessionsResponse.sessions)
-        setRecentAttendance(attendanceResponse.attendance)
-        
-        // Calculate stats from loaded data
-        const totalStudents = coursesResponse.courses.reduce((sum, course) => sum + course.students, 0)
-        const totalSessions = coursesResponse.courses.reduce((sum, course) => sum + course.sessions, 0)
-        const avgAttendance = attendanceResponse.attendance.reduce((sum, record) => sum + record.rate, 0) / attendanceResponse.attendance.length
-        
-        setStats({
-          totalStudents,
-          totalCourses: coursesResponse.courses.length,
-          totalSessions,
-          averageAttendance: avgAttendance.toFixed(1)
-        })
-        
+        // Mock attendance data that matches the interface
+        const mockAttendance = [
+          { id: '2341421', name: 'Maleesha Sanjana', building: 'Dortian', faculty: 'Computing', date: '5 November 2025', status: 'Early Arrived', checkin: '09:00', checkout: '16:00' },
+          { id: '3411421', name: 'Denuka Manujaya', building: 'Zenith', faculty: 'Management', date: '5 November 2025', status: 'Absent', checkin: '---', checkout: '16:00' },
+          { id: '2341721', name: 'Vidhmi Kavindya', building: 'Westlane', faculty: 'Humanities', date: '4 November 2025', status: 'On Time', checkin: '10:30', checkout: '16:00' },
+          { id: '2341421', name: 'Nurani Kawshalya', building: 'Spencer', faculty: 'Engineering', date: '5 November 2025', status: 'Early Arrived', checkin: '08:00', checkout: '16:00' },
+          { id: '2341421', name: 'Samadhi Hansika', building: 'Sky', faculty: 'Management', date: '5 November 2025', status: 'Early Arrived', checkin: '08:00', checkout: '16:00' },
+          { id: '2341421', name: 'Udari Malshika', building: 'Top', faculty: 'Management', date: '5 November 2025', status: 'Early Arrived', checkin: '08:00', checkout: '16:00' }
+        ]
+        setAttendanceData(mockAttendance)
       } catch (error) {
-        console.error('Error loading dashboard data:', error)
+        console.error('Error loading attendance data:', error)
       } finally {
         setLoading(false)
       }
     }
 
-    loadDashboardData()
+    loadAttendanceData()
   }, [])
 
-  const getAttendanceColor = (rate) => {
-    if (rate >= 90) return 'excellent'
-    if (rate >= 80) return 'good'
-    if (rate >= 70) return 'warning'
-    return 'poor'
+  const formatTime = (date) => {
+    return date.toLocaleTimeString('en-US', {
+      hour12: true,
+      hour: 'numeric',
+      minute: '2-digit',
+      second: '2-digit'
+    })
+  }
+
+  const formatDate = (date) => {
+    const day = date.getDate()
+    const month = date.toLocaleDateString('en-US', { month: 'long' })
+    const year = date.getFullYear()
+    
+    const getOrdinalSuffix = (day) => {
+      if (day > 3 && day < 21) return 'th'
+      switch (day % 10) {
+        case 1: return 'st'
+        case 2: return 'nd'
+        case 3: return 'rd'
+        default: return 'th'
+      }
+    }
+
+    return `${day}${getOrdinalSuffix(day)} ${month} ${year}`
+  }
+
+  const formatCurrentDate = (date) => {
+    const day = date.getDate()
+    const month = date.toLocaleDateString('en-US', { month: 'short' })
+    const year = date.getFullYear()
+    
+    return `${day} ${month} ${year}`
+  }
+
+  const sidebarItems = [
+    { icon: BarChart3, label: 'Dashboard' },
+    { icon: TrendingUp, label: 'Analytics' },
+    { icon: FileText, label: 'Reports' },
+    { icon: Settings, label: 'Settings' },
+    { icon: User, label: 'Profile' }
+  ]
+
+  const handleSidebarClick = (index, label) => {
+    setActiveTab(index)
+  }
+
+  const handleLogout = async () => {
+    try {
+      await mockApi.logout()
+      toast.success('Logged out successfully')
+      navigate('/')
+    } catch (error) {
+      console.error('Logout error:', error)
+      toast.error('Logout failed')
+      // Navigate anyway
+      navigate('/')
+    }
+  }
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Early Arrived':
+        return 'early-arrived'
+      case 'On Time':
+        return 'on-time'
+      case 'Absent':
+        return 'absent'
+      default:
+        return 'on-time'
+    }
   }
 
   if (loading) {
@@ -81,185 +139,131 @@ const LecturerDashboard = () => {
     )
   }
 
+  if (loading) {
+    return (
+      <div className="admin-dashboard-container">
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+          <p>Loading dashboard...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="dashboard-container lecturer">
-      <div className="dashboard-header">
-        <motion.div
-          className="header-content"
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h1>Lecturer Dashboard</h1>
-          <p>Manage your courses and track attendance</p>
-        </motion.div>
+    <div className="admin-dashboard-container">
+      {/* Left Panel - Same as Landing Page */}
+      <div className="left-panel">
+        <div className="brand-section">
+          <h1 className="brand-title">ATTENDIQ</h1>
+          <p className="brand-subtitle">ADMIN DASHBOARD</p>
+        </div>
+        
+        <div className="profile-section">
+          <div className="profile-avatar">
+            <User size={32} />
+          </div>
+          <div className="profile-name">MALEESHA SANJANA</div>
+        </div>
+        
+        <div className="time-widget">
+          <div className="time-icon">
+            <Sun size={24} />
+          </div>
+          <div className="time-display">
+            <div className="current-time">{formatTime(currentTime)}</div>
+            <div className="current-date">{formatDate(currentTime)}</div>
+          </div>
+        </div>
       </div>
 
-      <div className="dashboard-content">
-        {/* Stats Overview */}
-        <div className="stats-grid lecturer-stats">
-          <motion.div
-            className="stat-card"
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.1, duration: 0.5 }}
-          >
-            <div className="stat-icon students">
-              <Users size={24} />
+      {/* Main Content - Same structure as Landing Page */}
+      <div className="main-content">
+        {/* Top Navigation - Same as Landing Page */}
+        <nav className="top-nav">
+          <div className="nav-left">
+            <span className="nav-item active">Dashboard</span>
+            <span className="nav-arrow">➤</span>
+          </div>
+          <div className="nav-right">
+            <div className="search-container">
+              <Search size={16} />
+              <input type="text" placeholder="Quick Search..." />
             </div>
-            <div className="stat-content">
-              <div className="stat-number">{stats.totalStudents}</div>
-              <div className="stat-label">Total Students</div>
-            </div>
-          </motion.div>
+            <button className="logout-btn" onClick={handleLogout}>LogOut</button>
+          </div>
+        </nav>
 
-          <motion.div
-            className="stat-card"
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-          >
-            <div className="stat-icon courses">
-              <BookOpen size={24} />
+        {/* Sidebar - Same as Landing Page */}
+        <div className="sidebar">
+          {sidebarItems.map((item, index) => (
+            <div
+              key={index}
+              className={`sidebar-item ${activeTab === index ? 'active' : ''}`}
+              onClick={() => handleSidebarClick(index, item.label)}
+            >
+              <item.icon size={20} />
             </div>
-            <div className="stat-content">
-              <div className="stat-number">{stats.totalCourses}</div>
-              <div className="stat-label">My Courses</div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            className="stat-card"
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-          >
-            <div className="stat-icon sessions">
-              <Calendar size={24} />
-            </div>
-            <div className="stat-content">
-              <div className="stat-number">{stats.totalSessions}</div>
-              <div className="stat-label">Sessions Conducted</div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            className="stat-card"
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
-          >
-            <div className="stat-icon attendance">
-              <BarChart3 size={24} />
-            </div>
-            <div className="stat-content">
-              <div className="stat-number">{stats.averageAttendance}%</div>
-              <div className="stat-label">Avg Attendance</div>
-            </div>
-          </motion.div>
+          ))}
         </div>
 
-        {/* My Courses */}
-        <motion.div
-          className="dashboard-card my-courses"
-          initial={{ x: -50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.6 }}
-        >
-          <div className="card-header">
-            <BookOpen className="card-icon" size={24} />
-            <h3>My Courses</h3>
-            <button className="add-btn">
-              <Plus size={16} />
-              Add Course
-            </button>
-          </div>
-          
-          <div className="courses-grid">
-            {courses.map((course) => (
-              <div key={course.id} className="course-card">
-                <div className="course-header">
-                  <div className="course-code">{course.code}</div>
-                  <div className="course-students">{course.students} students</div>
+        {/* Attendance Overview - Positioned like Face Recognition Area */}
+        <div className="attendance-area">
+          <div className="attendance-overview">
+            <div className="overview-header">
+              <h2>Attendance Overview</h2>
+              <div className="overview-controls">
+                <div className="date-filter">
+                  <Calendar size={16} />
+                  <span>{formatCurrentDate(currentTime)}</span>
                 </div>
-                <div className="course-name">{course.name}</div>
-                <div className="course-stats">
-                  <span>{course.sessions} sessions</span>
-                </div>
+                <button className="generate-report-btn">
+                  <Download size={16} />
+                  Generate Reports
+                </button>
               </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Upcoming Sessions */}
-        <motion.div
-          className="dashboard-card upcoming-sessions"
-          initial={{ y: 50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.7, duration: 0.6 }}
-        >
-          <div className="card-header">
-            <Calendar className="card-icon" size={24} />
-            <h3>Upcoming Sessions</h3>
-            <button className="add-btn">
-              <Plus size={16} />
-              Schedule Session
-            </button>
-          </div>
-          
-          <div className="sessions-list">
-            {upcomingSessions.map((session) => (
-              <div key={session.id} className="session-item">
-                <div className="session-info">
-                  <div className="session-course">{session.course}</div>
-                  <div className="session-name">{session.name}</div>
-                  <div className="session-location">{session.location}</div>
-                </div>
-                <div className="session-schedule">
-                  <div className="session-date">{session.date}</div>
-                  <div className="session-time">{session.time}</div>
-                </div>
+            </div>
+            
+            <div className="attendance-table-container">
+              <table className="attendance-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Student Name</th>
+                    <th>Building</th>
+                    <th>Faculty</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Check-in</th>
+                    <th>Check-out</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {attendanceData.map((record, index) => (
+                    <tr key={index}>
+                      <td>{record.id}</td>
+                      <td>{record.name}</td>
+                      <td>{record.building}</td>
+                      <td>{record.faculty}</td>
+                      <td>{record.date}</td>
+                      <td className="status-cell">
+                        <span className={`status-badge ${getStatusColor(record.status)}`}>
+                          {record.status}
+                        </span>
+                      </td>
+                      <td className="time-cell">{record.checkin}</td>
+                      <td className="time-cell">{record.checkout}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              
+              <div className="table-footer">
+                <span>Page 1 of 100</span>
               </div>
-            ))}
+            </div>
           </div>
-        </motion.div>
-
-        {/* Recent Attendance */}
-        <motion.div
-          className="dashboard-card recent-attendance lecturer"
-          initial={{ x: 50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: 0.9, duration: 0.6 }}
-        >
-          <div className="card-header">
-            <BarChart3 className="card-icon" size={24} />
-            <h3>Recent Session Attendance</h3>
-          </div>
-          
-          <div className="attendance-list">
-            {recentAttendance.map((record) => (
-              <div key={record.id} className="attendance-item lecturer">
-                <div className="attendance-info">
-                  <div className="course-info">
-                    <span className="course-code">{record.course}</span>
-                    <span className="session-name">{record.session}</span>
-                  </div>
-                  <div className="attendance-meta">
-                    <span className="date">{record.date}</span>
-                    <span className="attendance-count">
-                      {record.present}/{record.total} students
-                    </span>
-                  </div>
-                </div>
-                <div className="attendance-rate">
-                  <div className={`rate-badge ${getAttendanceColor(record.rate)}`}>
-                    {record.rate}%
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   )

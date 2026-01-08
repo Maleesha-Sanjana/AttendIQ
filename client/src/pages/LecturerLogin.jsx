@@ -26,8 +26,10 @@ const LecturerLogin = () => {
     setIsLoading(true)
 
     try {
-      const response = await mockApi.login(formData.username, formData.password, 'lecturer')
+      // Use admin credentials for lecturer login as requested
+      const response = await mockApi.login(formData.username, formData.password, 'admin')
       toast.success('Login successful!')
+      // Redirect to lecturer dashboard after admin authentication
       navigate('/lecturer-dashboard')
     } catch (error) {
       toast.error(error.message || 'Login failed. Please try again.')
@@ -55,8 +57,8 @@ const LecturerLogin = () => {
         transition={{ duration: 0.5 }}
       >
         <div className="login-header">
-          <h1>Lecturer Login</h1>
-          <p>Access your teaching dashboard</p>
+          <h1>Lecturer Access</h1>
+          <p>Enter admin credentials to access lecturer dashboard</p>
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
@@ -96,7 +98,7 @@ const LecturerLogin = () => {
         </form>
 
         <div className="login-footer">
-          <p>Demo credentials: lecturer / lecturer123</p>
+          <p>Demo credentials: admin / admin123</p>
         </div>
       </motion.div>
     </div>
