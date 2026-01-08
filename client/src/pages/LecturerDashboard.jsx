@@ -21,6 +21,9 @@ const LecturerDashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date())
   const [activeTab, setActiveTab] = useState(0)
   const [attendanceData, setAttendanceData] = useState([])
+  const [filteredData, setFilteredData] = useState([])
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]) // Today's date
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -37,14 +40,20 @@ const LecturerDashboard = () => {
         setLoading(true)
         // Mock attendance data that matches the interface
         const mockAttendance = [
-          { id: '2341421', name: 'Maleesha Sanjana', building: 'Dortian', faculty: 'Computing', date: '5 November 2025', status: 'Early Arrived', checkin: '09:00', checkout: '16:00' },
-          { id: '3411421', name: 'Denuka Manujaya', building: 'Zenith', faculty: 'Management', date: '5 November 2025', status: 'Absent', checkin: '---', checkout: '16:00' },
-          { id: '2341721', name: 'Vidhmi Kavindya', building: 'Westlane', faculty: 'Humanities', date: '4 November 2025', status: 'On Time', checkin: '10:30', checkout: '16:00' },
-          { id: '2341421', name: 'Nurani Kawshalya', building: 'Spencer', faculty: 'Engineering', date: '5 November 2025', status: 'Early Arrived', checkin: '08:00', checkout: '16:00' },
-          { id: '2341421', name: 'Samadhi Hansika', building: 'Sky', faculty: 'Management', date: '5 November 2025', status: 'Early Arrived', checkin: '08:00', checkout: '16:00' },
-          { id: '2341421', name: 'Udari Malshika', building: 'Top', faculty: 'Management', date: '5 November 2025', status: 'Early Arrived', checkin: '08:00', checkout: '16:00' }
+          { id: '2341421', name: 'Maleesha Sanjana', building: 'Dortian', faculty: 'Computing', date: '2025-11-05', status: 'Early Arrived', checkin: '09:00', checkout: '16:00' },
+          { id: '3411421', name: 'Denuka Manujaya', building: 'Zenith', faculty: 'Management', date: '2025-11-05', status: 'Absent', checkin: '---', checkout: '16:00' },
+          { id: '2341721', name: 'Vidhmi Kavindya', building: 'Westlane', faculty: 'Humanities', date: '2025-11-04', status: 'On Time', checkin: '10:30', checkout: '16:00' },
+          { id: '2341421', name: 'Nurani Kawshalya', building: 'Spencer', faculty: 'Engineering', date: '2025-11-05', status: 'Early Arrived', checkin: '08:00', checkout: '16:00' },
+          { id: '2341421', name: 'Samadhi Hansika', building: 'Sky', faculty: 'Management', date: '2025-11-05', status: 'Early Arrived', checkin: '08:00', checkout: '16:00' },
+          { id: '2341421', name: 'Udari Malshika', building: 'Top', faculty: 'Management', date: '2025-11-05', status: 'Early Arrived', checkin: '08:00', checkout: '16:00' },
+          { id: '2341822', name: 'Kasun Perera', building: 'Phoenix', faculty: 'Computing', date: '2026-01-08', status: 'On Time', checkin: '09:15', checkout: '16:00' },
+          { id: '2342024', name: 'Thilini Fernando', building: 'Aurora', faculty: 'Computing', date: '2026-01-08', status: 'Early Arrived', checkin: '08:30', checkout: '16:00' },
+          { id: '2342125', name: 'Ravindu Jayasinghe', building: 'Nexus', faculty: 'Engineering', date: '2026-01-08', status: 'On Time', checkin: '09:00', checkout: '16:00' },
+          { id: '2342226', name: 'Sanduni Wickramasinghe', building: 'Vertex', faculty: 'Humanities', date: '2026-01-07', status: 'Absent', checkin: '---', checkout: '---' },
+          { id: '2342327', name: 'Chamara Rathnayake', building: 'Summit', faculty: 'Management', date: '2026-01-07', status: 'On Time', checkin: '09:45', checkout: '16:00' }
         ]
         setAttendanceData(mockAttendance)
+        setFilteredData(mockAttendance) // Initialize filtered data
       } catch (error) {
         console.error('Error loading attendance data:', error)
       } finally {
@@ -54,6 +63,25 @@ const LecturerDashboard = () => {
 
     loadAttendanceData()
   }, [])
+
+  // Filter data based on search query and selected date
+  useEffect(() => {
+    let filtered = attendanceData
+
+    // Filter by search query (student name)
+    if (searchQuery.trim()) {
+      filtered = filtered.filter(record =>
+        record.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    }
+
+    // Filter by selected date
+    if (selectedDate) {
+      filtered = filtered.filter(record => record.date === selectedDate)
+    }
+
+    setFilteredData(filtered)
+  }, [searchQuery, selectedDate, attendanceData])
 
   const formatTime = (date) => {
     return date.toLocaleTimeString('en-US', {
@@ -100,6 +128,24 @@ const LecturerDashboard = () => {
 
   const handleSidebarClick = (index, label) => {
     setActiveTab(index)
+  }
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value)
+  }
+
+  const handleDateChange = (e) => {
+    setSelectedDate(e.target.value)
+  }
+
+  const formatDisplayDate = (dateString) => {
+    if (!dateString) return ''
+    const date = new Date(dateString)
+    const day = date.getDate()
+    const month = date.toLocaleDateString('en-US', { month: 'long' })
+    const year = date.getFullYear()
+    
+    return `${day} ${month} ${year}`
   }
 
   const handleLogout = async () => {
@@ -188,7 +234,12 @@ const LecturerDashboard = () => {
           <div className="nav-right">
             <div className="search-container">
               <Search size={16} />
-              <input type="text" placeholder="Quick Search..." />
+              <input 
+                type="text" 
+                placeholder="Quick Search..." 
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
             </div>
             <button className="logout-btn" onClick={handleLogout}>LogOut</button>
           </div>
@@ -215,7 +266,19 @@ const LecturerDashboard = () => {
               <div className="overview-controls">
                 <div className="date-filter">
                   <Calendar size={16} />
-                  <span>{formatCurrentDate(currentTime)}</span>
+                  <input 
+                    type="date" 
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                    className="date-input"
+                  />
+                  <button 
+                    className="clear-date-btn"
+                    onClick={() => setSelectedDate('')}
+                    title="Clear date filter"
+                  >
+                    ×
+                  </button>
                 </div>
                 <button className="generate-report-btn">
                   <Download size={16} />
@@ -239,27 +302,40 @@ const LecturerDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {attendanceData.map((record, index) => (
-                    <tr key={index}>
-                      <td>{record.id}</td>
-                      <td>{record.name}</td>
-                      <td>{record.building}</td>
-                      <td>{record.faculty}</td>
-                      <td>{record.date}</td>
-                      <td className="status-cell">
-                        <span className={`status-badge ${getStatusColor(record.status)}`}>
-                          {record.status}
-                        </span>
+                  {filteredData.length > 0 ? (
+                    filteredData.map((record, index) => (
+                      <tr key={index}>
+                        <td>{record.id}</td>
+                        <td>{record.name}</td>
+                        <td>{record.building}</td>
+                        <td>{record.faculty}</td>
+                        <td>{formatDisplayDate(record.date)}</td>
+                        <td className="status-cell">
+                          <span className={`status-badge ${getStatusColor(record.status)}`}>
+                            {record.status}
+                          </span>
+                        </td>
+                        <td className="time-cell">{record.checkin}</td>
+                        <td className="time-cell">{record.checkout}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="8" style={{ textAlign: 'center', padding: '2rem', color: 'rgba(255, 255, 255, 0.5)' }}>
+                        {searchQuery ? `No students found matching "${searchQuery}"` : 'No attendance records found'}
                       </td>
-                      <td className="time-cell">{record.checkin}</td>
-                      <td className="time-cell">{record.checkout}</td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
               
               <div className="table-footer">
-                <span>Page 1 of 100</span>
+                <span>
+                  {searchQuery || selectedDate
+                    ? `Showing ${filteredData.length} of ${attendanceData.length} records${selectedDate ? ` for ${formatDisplayDate(selectedDate)}` : ''}${searchQuery ? ` matching "${searchQuery}"` : ''}`
+                    : `Page 1 of 100`
+                  }
+                </span>
               </div>
             </div>
           </div>
