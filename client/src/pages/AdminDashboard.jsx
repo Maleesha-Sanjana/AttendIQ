@@ -2,19 +2,17 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { 
-  LayoutDashboard,
-  PieChart,
-  FileBarChart,
-  Folder,
-  Users,
+  BarChart3,
+  TrendingUp,
+  FileText,
+  Settings,
+  User,
   Sun,
   Search,
   Calendar,
   Download
 } from 'lucide-react'
 import toast from 'react-hot-toast'
-import jsPDF from 'jspdf'
-import 'jspdf-autotable'
 import { mockApi } from '../services/mockApi'
 import './Dashboard.css'
 
@@ -129,11 +127,11 @@ const AdminDashboard = () => {
   }
 
   const sidebarItems = [
-    { icon: LayoutDashboard, label: 'Dashboard' },
-    { icon: PieChart, label: 'Analytics' },
-    { icon: FileBarChart, label: 'Reports' },
-    { icon: Folder, label: 'Files' },
-    { icon: Users, label: 'Users' }
+    { icon: BarChart3, label: 'Dashboard' },
+    { icon: TrendingUp, label: 'Analytics' },
+    { icon: FileText, label: 'Reports' },
+    { icon: Settings, label: 'Settings' },
+    { icon: User, label: 'Profile' }
   ]
 
   const handleSidebarClick = (index, label) => {
@@ -148,105 +146,9 @@ const AdminDashboard = () => {
     setSelectedDate(e.target.value)
   }
 
-  const generatePDF = () => {
-    try {
-      console.log('Starting PDF generation...')
-      console.log('Filtered data:', filteredData)
-      
-      // Create a new jsPDF instance
-      const doc = new jsPDF()
-      
-      // Test basic PDF functionality first
-      doc.setFontSize(20)
-      doc.text('ATTENDIQ - Attendance Report', 20, 20)
-      
-      // Get current date and time for the report
-      const now = new Date()
-      const reportDate = now.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      })
-      const reportTime = now.toLocaleTimeString('en-US', {
-        hour12: true,
-        hour: 'numeric',
-        minute: '2-digit'
-      })
-
-      // Add basic info
-      doc.setFontSize(12)
-      doc.text(`Generated on: ${reportDate} at ${reportTime}`, 20, 35)
-      doc.text(`Total Records: ${filteredData.length}`, 20, 45)
-      
-      // Determine filter info
-      let filterInfo = 'All Records'
-      if (selectedDate && searchQuery) {
-        filterInfo = `Date: ${formatDisplayDate(selectedDate)}, Student: "${searchQuery}"`
-      } else if (selectedDate) {
-        filterInfo = `Date: ${formatDisplayDate(selectedDate)}`
-      } else if (searchQuery) {
-        filterInfo = `Student: "${searchQuery}"`
-      }
-      
-      doc.text(`Filter: ${filterInfo}`, 20, 55)
-
-      // Add simple text-based table instead of autoTable for now
-      doc.setFontSize(10)
-      let yPosition = 70
-      
-      // Table header
-      doc.text('ID', 20, yPosition)
-      doc.text('Student Name', 40, yPosition)
-      doc.text('Building', 90, yPosition)
-      doc.text('Faculty', 120, yPosition)
-      doc.text('Status', 150, yPosition)
-      
-      yPosition += 10
-      
-      // Table rows (limit to first 10 for testing)
-      const limitedData = filteredData.slice(0, 10)
-      limitedData.forEach((record, index) => {
-        if (yPosition > 250) { // Start new page if needed
-          doc.addPage()
-          yPosition = 20
-        }
-        
-        doc.text(record.id, 20, yPosition)
-        doc.text(record.name, 40, yPosition)
-        doc.text(record.building, 90, yPosition)
-        doc.text(record.faculty, 120, yPosition)
-        doc.text(record.status, 150, yPosition)
-        
-        yPosition += 8
-      })
-
-      // Generate filename
-      const timestamp = now.toISOString().split('T')[0]
-      let filename = `attendance-report-${timestamp}`
-      
-      if (selectedDate && searchQuery) {
-        filename = `attendance-${selectedDate}-${searchQuery.replace(/\s+/g, '-')}-${timestamp}`
-      } else if (selectedDate) {
-        filename = `attendance-${selectedDate}-${timestamp}`
-      } else if (searchQuery) {
-        filename = `attendance-${searchQuery.replace(/\s+/g, '-')}-${timestamp}`
-      }
-      
-      filename += '.pdf'
-
-      console.log('Saving PDF with filename:', filename)
-
-      // Save the PDF
-      doc.save(filename)
-      
-      toast.success(`PDF report generated successfully! (${filteredData.length} records)`)
-      console.log('PDF generation completed successfully')
-      
-    } catch (error) {
-      console.error('Detailed PDF generation error:', error)
-      console.error('Error stack:', error.stack)
-      toast.error(`Failed to generate PDF report: ${error.message}`)
-    }
+  const handleGenerateReports = () => {
+    // Navigate to report generating interface
+    navigate('/report-generating')
   }
 
   const handleLogout = async () => {
@@ -297,7 +199,7 @@ const AdminDashboard = () => {
         
         <div className="profile-section">
           <div className="profile-avatar">
-            <Users size={32} />
+            <User size={32} />
           </div>
           <div className="profile-name">MALEESHA SANJANA</div>
         </div>
@@ -370,7 +272,7 @@ const AdminDashboard = () => {
                     ×
                   </button>
                 </div>
-                <button className="generate-report-btn" onClick={generatePDF}>
+                <button className="generate-report-btn" onClick={handleGenerateReports}>
                   <Download size={16} />
                   Generate Reports
                 </button>
