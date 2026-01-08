@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import { 
   LayoutDashboard,
   PieChart,
@@ -9,12 +8,12 @@ import {
   Users,
   Sun,
   Search,
+  BookOpen,
   Calendar,
-  Download
+  Clock,
+  TrendingUp
 } from 'lucide-react'
 import toast from 'react-hot-toast'
-import jsPDF from 'jspdf'
-import 'jspdf-autotable'
 import { mockApi } from '../services/mockApi'
 import './Dashboard.css'
 
@@ -22,11 +21,9 @@ const LecturerDashboard = () => {
   const navigate = useNavigate()
   const [currentTime, setCurrentTime] = useState(new Date())
   const [activeTab, setActiveTab] = useState(0)
-  const [attendanceData, setAttendanceData] = useState([])
-  const [filteredData, setFilteredData] = useState([])
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]) // Today's date
   const [loading, setLoading] = useState(true)
+  const [courses, setCourses] = useState([])
+  const [upcomingSessions, setUpcomingSessions] = useState([])
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -37,59 +34,74 @@ const LecturerDashboard = () => {
   }, [])
 
   useEffect(() => {
-    const loadAttendanceData = async () => {
+    const loadLecturerData = async () => {
       try {
         setLoading(true)
-        // Mock attendance data that matches the interface
-        const today = new Date().toISOString().split('T')[0] // Today's date in YYYY-MM-DD format
         
-        const mockAttendance = [
-          { id: '2341421', name: 'Maleesha Sanjana', building: 'Dortian', faculty: 'Computing', date: '2025-11-05', status: 'Early Arrived', checkin: '09:00', checkout: '16:00' },
-          { id: '3411421', name: 'Denuka Manujaya', building: 'Zenith', faculty: 'Management', date: '2025-11-05', status: 'Absent', checkin: '---', checkout: '16:00' },
-          { id: '2341721', name: 'Vidhmi Kavindya', building: 'Westlane', faculty: 'Humanities', date: '2025-11-04', status: 'On Time', checkin: '10:30', checkout: '16:00' },
-          { id: '2341421', name: 'Nurani Kawshalya', building: 'Spencer', faculty: 'Engineering', date: '2025-11-05', status: 'Early Arrived', checkin: '08:00', checkout: '16:00' },
-          { id: '2341421', name: 'Samadhi Hansika', building: 'Sky', faculty: 'Management', date: '2025-11-05', status: 'Early Arrived', checkin: '08:00', checkout: '16:00' },
-          { id: '2341421', name: 'Udari Malshika', building: 'Top', faculty: 'Management', date: '2025-11-05', status: 'Early Arrived', checkin: '08:00', checkout: '16:00' },
-          { id: '2341822', name: 'Kasun Perera', building: 'Phoenix', faculty: 'Computing', date: '2026-01-08', status: 'On Time', checkin: '09:15', checkout: '16:00' },
-          { id: '2342024', name: 'Thilini Fernando', building: 'Aurora', faculty: 'Computing', date: '2026-01-08', status: 'Early Arrived', checkin: '08:30', checkout: '16:00' },
-          { id: '2342125', name: 'Ravindu Jayasinghe', building: 'Nexus', faculty: 'Engineering', date: '2026-01-08', status: 'On Time', checkin: '09:00', checkout: '16:00' },
-          { id: '2342226', name: 'Sanduni Wickramasinghe', building: 'Vertex', faculty: 'Humanities', date: '2026-01-07', status: 'Absent', checkin: '---', checkout: '---' },
-          { id: '2342327', name: 'Chamara Rathnayake', building: 'Summit', faculty: 'Management', date: '2026-01-07', status: 'On Time', checkin: '09:45', checkout: '16:00' },
-          // Today's records
-          { id: '2342428', name: 'Amara Jayawardena', building: 'Crystal', faculty: 'Computing', date: today, status: 'Early Arrived', checkin: '08:45', checkout: '16:00' },
-          { id: '2342529', name: 'Dilshan Mendis', building: 'Platinum', faculty: 'Engineering', date: today, status: 'On Time', checkin: '09:30', checkout: '16:00' },
-          { id: '2342630', name: 'Ishara Gunasekara', building: 'Diamond', faculty: 'Management', date: today, status: 'Early Arrived', checkin: '08:15', checkout: '16:00' }
+        // Mock lecturer courses data
+        const mockCourses = [
+          { 
+            id: 'CS101', 
+            name: 'Introduction to Computer Science', 
+            students: 45, 
+            sessions: 12,
+            attendanceRate: 92
+          },
+          { 
+            id: 'CS201', 
+            name: 'Data Structures and Algorithms', 
+            students: 38, 
+            sessions: 15,
+            attendanceRate: 88
+          },
+          { 
+            id: 'CS301', 
+            name: 'Database Management Systems', 
+            students: 32, 
+            sessions: 10,
+            attendanceRate: 95
+          }
         ]
-        setAttendanceData(mockAttendance)
-        setFilteredData(mockAttendance) // Initialize filtered data
+
+        // Mock upcoming sessions
+        const mockSessions = [
+          {
+            course: 'CS101',
+            name: 'Introduction to Programming',
+            date: '2026-01-09',
+            time: '09:00 AM',
+            location: 'Lab 101',
+            duration: '2 hours'
+          },
+          {
+            course: 'CS201',
+            name: 'Binary Trees and Graphs',
+            date: '2026-01-09',
+            time: '02:00 PM',
+            location: 'Room 205',
+            duration: '1.5 hours'
+          },
+          {
+            course: 'CS301',
+            name: 'SQL Queries and Optimization',
+            date: '2026-01-10',
+            time: '10:30 AM',
+            location: 'Lab 301',
+            duration: '2 hours'
+          }
+        ]
+
+        setCourses(mockCourses)
+        setUpcomingSessions(mockSessions)
       } catch (error) {
-        console.error('Error loading attendance data:', error)
+        console.error('Error loading lecturer data:', error)
       } finally {
         setLoading(false)
       }
     }
 
-    loadAttendanceData()
+    loadLecturerData()
   }, [])
-
-  // Filter data based on search query and selected date
-  useEffect(() => {
-    let filtered = attendanceData
-
-    // Filter by search query (student name)
-    if (searchQuery.trim()) {
-      filtered = filtered.filter(record =>
-        record.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    }
-
-    // Filter by selected date
-    if (selectedDate) {
-      filtered = filtered.filter(record => record.date === selectedDate)
-    }
-
-    setFilteredData(filtered)
-  }, [searchQuery, selectedDate, attendanceData])
 
   const formatTime = (date) => {
     return date.toLocaleTimeString('en-US', {
@@ -118,22 +130,13 @@ const LecturerDashboard = () => {
     return `${day}${getOrdinalSuffix(day)} ${month} ${year}`
   }
 
-  const formatCurrentDate = (date) => {
-    const day = date.getDate()
-    const month = date.toLocaleDateString('en-US', { month: 'short' })
-    const year = date.getFullYear()
-    
-    return `${day} ${month} ${year}`
-  }
-
   const formatDisplayDate = (dateString) => {
     if (!dateString) return ''
     const date = new Date(dateString)
     const day = date.getDate()
-    const month = date.toLocaleDateString('en-US', { month: 'long' })
-    const year = date.getFullYear()
+    const month = date.toLocaleDateString('en-US', { month: 'short' })
     
-    return `${day} ${month} ${year}`
+    return `${day} ${month}`
   }
 
   const sidebarItems = [
@@ -148,115 +151,6 @@ const LecturerDashboard = () => {
     setActiveTab(index)
   }
 
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value)
-  }
-
-  const handleDateChange = (e) => {
-    setSelectedDate(e.target.value)
-  }
-
-  const generatePDF = () => {
-    try {
-      console.log('Starting PDF generation...')
-      console.log('Filtered data:', filteredData)
-      
-      // Create a new jsPDF instance
-      const doc = new jsPDF()
-      
-      // Test basic PDF functionality first
-      doc.setFontSize(20)
-      doc.text('ATTENDIQ - Attendance Report', 20, 20)
-      
-      // Get current date and time for the report
-      const now = new Date()
-      const reportDate = now.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      })
-      const reportTime = now.toLocaleTimeString('en-US', {
-        hour12: true,
-        hour: 'numeric',
-        minute: '2-digit'
-      })
-
-      // Add basic info
-      doc.setFontSize(12)
-      doc.text(`Generated on: ${reportDate} at ${reportTime}`, 20, 35)
-      doc.text(`Total Records: ${filteredData.length}`, 20, 45)
-      
-      // Determine filter info
-      let filterInfo = 'All Records'
-      if (selectedDate && searchQuery) {
-        filterInfo = `Date: ${formatDisplayDate(selectedDate)}, Student: "${searchQuery}"`
-      } else if (selectedDate) {
-        filterInfo = `Date: ${formatDisplayDate(selectedDate)}`
-      } else if (searchQuery) {
-        filterInfo = `Student: "${searchQuery}"`
-      }
-      
-      doc.text(`Filter: ${filterInfo}`, 20, 55)
-
-      // Add simple text-based table instead of autoTable for now
-      doc.setFontSize(10)
-      let yPosition = 70
-      
-      // Table header
-      doc.text('ID', 20, yPosition)
-      doc.text('Student Name', 40, yPosition)
-      doc.text('Building', 90, yPosition)
-      doc.text('Faculty', 120, yPosition)
-      doc.text('Status', 150, yPosition)
-      
-      yPosition += 10
-      
-      // Table rows (limit to first 10 for testing)
-      const limitedData = filteredData.slice(0, 10)
-      limitedData.forEach((record, index) => {
-        if (yPosition > 250) { // Start new page if needed
-          doc.addPage()
-          yPosition = 20
-        }
-        
-        doc.text(record.id, 20, yPosition)
-        doc.text(record.name, 40, yPosition)
-        doc.text(record.building, 90, yPosition)
-        doc.text(record.faculty, 120, yPosition)
-        doc.text(record.status, 150, yPosition)
-        
-        yPosition += 8
-      })
-
-      // Generate filename
-      const timestamp = now.toISOString().split('T')[0]
-      let filename = `attendance-report-${timestamp}`
-      
-      if (selectedDate && searchQuery) {
-        filename = `attendance-${selectedDate}-${searchQuery.replace(/\s+/g, '-')}-${timestamp}`
-      } else if (selectedDate) {
-        filename = `attendance-${selectedDate}-${timestamp}`
-      } else if (searchQuery) {
-        filename = `attendance-${searchQuery.replace(/\s+/g, '-')}-${timestamp}`
-      }
-      
-      filename += '.pdf'
-
-      console.log('Saving PDF with filename:', filename)
-
-      // Save the PDF
-      doc.save(filename)
-      
-      toast.success(`PDF report generated successfully! (${filteredData.length} records)`)
-      console.log('PDF generation completed successfully')
-      
-    } catch (error) {
-      console.error('Detailed PDF generation error:', error)
-      console.error('Error stack:', error.stack)
-      toast.error(`Failed to generate PDF report: ${error.message}`)
-    }
-  }
-
   const handleLogout = async () => {
     try {
       await mockApi.logout()
@@ -265,22 +159,15 @@ const LecturerDashboard = () => {
     } catch (error) {
       console.error('Logout error:', error)
       toast.error('Logout failed')
-      // Navigate anyway
       navigate('/')
     }
   }
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'Early Arrived':
-        return 'early-arrived'
-      case 'On Time':
-        return 'on-time'
-      case 'Absent':
-        return 'absent'
-      default:
-        return 'on-time'
-    }
+  const getAttendanceRateColor = (rate) => {
+    if (rate >= 90) return 'excellent'
+    if (rate >= 80) return 'good'
+    if (rate >= 70) return 'warning'
+    return 'poor'
   }
 
   if (loading) {
@@ -300,7 +187,7 @@ const LecturerDashboard = () => {
       <div className="left-panel">
         <div className="brand-section">
           <h1 className="brand-title">ATTENDIQ</h1>
-          <p className="brand-subtitle">ADMIN DASHBOARD</p>
+          <p className="brand-subtitle">LECTURER DASHBOARD</p>
         </div>
         
         <div className="profile-section">
@@ -330,15 +217,6 @@ const LecturerDashboard = () => {
             <span className="nav-arrow">➤</span>
           </div>
           <div className="nav-right">
-            <div className="search-container">
-              <Search size={16} />
-              <input 
-                type="text" 
-                placeholder="Quick Search..." 
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-            </div>
             <button className="logout-btn" onClick={handleLogout}>LogOut</button>
           </div>
         </nav>
@@ -356,84 +234,105 @@ const LecturerDashboard = () => {
           ))}
         </div>
 
-        {/* Attendance Overview - Positioned like Face Recognition Area */}
+        {/* Lecturer Content Area */}
         <div className="attendance-area">
-          <div className="attendance-overview">
-            <div className="overview-header">
-              <h2>Attendance Overview</h2>
-              <div className="overview-controls">
-                <div className="date-filter">
-                  <Calendar size={16} />
-                  <input 
-                    type="date" 
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    className="date-input"
-                  />
-                  <button 
-                    className="clear-date-btn"
-                    onClick={() => setSelectedDate('')}
-                    title="Clear date filter"
-                  >
-                    ×
-                  </button>
+          <div className="lecturer-analytics-content">
+            {/* Stats Cards Grid */}
+            <div className="lecturer-stats-grid">
+              <div className="lecturer-stat-card">
+                <div className="stat-value">452</div>
+                <div className="stat-label">Total Students</div>
+                <div className="stat-icon-corner">
+                  <Users size={20} />
                 </div>
-                <button className="generate-report-btn" onClick={generatePDF}>
-                  <Download size={16} />
-                  Generate Reports
-                </button>
+              </div>
+              
+              <div className="lecturer-stat-card">
+                <div className="stat-value">360</div>
+                <div className="stat-label">On Time</div>
+                <div className="stat-sublabel">24% more than yesterday</div>
+                <div className="stat-icon-corner">
+                  <Clock size={20} />
+                </div>
+              </div>
+              
+              <div className="lecturer-stat-card">
+                <div className="stat-value">62</div>
+                <div className="stat-label">Late Arrival</div>
+                <div className="stat-sublabel">12% less than yesterday</div>
+                <div className="stat-icon-corner">
+                  <TrendingUp size={20} />
+                </div>
+              </div>
+              
+              <div className="lecturer-stat-card">
+                <div className="stat-value">6</div>
+                <div className="stat-label">Early Departures</div>
+                <div className="stat-sublabel">2% less than yesterday</div>
+                <div className="stat-icon-corner">
+                  <Users size={20} />
+                </div>
               </div>
             </div>
-            
-            <div className="attendance-table-container">
-              <table className="attendance-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Student Name</th>
-                    <th>Building</th>
-                    <th>Faculty</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Check-in</th>
-                    <th>Check-out</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredData.length > 0 ? (
-                    filteredData.map((record, index) => (
-                      <tr key={index}>
-                        <td>{record.id}</td>
-                        <td>{record.name}</td>
-                        <td>{record.building}</td>
-                        <td>{record.faculty}</td>
-                        <td>{formatDisplayDate(record.date)}</td>
-                        <td className="status-cell">
-                          <span className={`status-badge ${getStatusColor(record.status)}`}>
-                            {record.status}
-                          </span>
-                        </td>
-                        <td className="time-cell">{record.checkin}</td>
-                        <td className="time-cell">{record.checkout}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="8" style={{ textAlign: 'center', padding: '2rem', color: 'rgba(255, 255, 255, 0.5)' }}>
-                        {searchQuery ? `No students found matching "${searchQuery}"` : 'No attendance records found'}
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-              
-              <div className="table-footer">
-                <span>
-                  {searchQuery || selectedDate
-                    ? `Showing ${filteredData.length} of ${attendanceData.length} records${selectedDate ? ` for ${formatDisplayDate(selectedDate)}` : ''}${searchQuery ? ` matching "${searchQuery}"` : ''}`
-                    : `Page 1 of 100`
-                  }
-                </span>
+
+            {/* Charts Section */}
+            <div className="lecturer-charts-grid">
+              {/* Weekly Attendance Chart */}
+              <div className="chart-container">
+                <h3>Weekly Attendance</h3>
+                <div className="chart-placeholder">
+                  <div className="bar-chart">
+                    <div className="bar" style={{height: '40%'}}></div>
+                    <div className="bar" style={{height: '60%'}}></div>
+                    <div className="bar" style={{height: '80%'}}></div>
+                    <div className="bar active" style={{height: '100%'}}></div>
+                    <div className="bar" style={{height: '70%'}}></div>
+                    <div className="bar" style={{height: '50%'}}></div>
+                    <div className="bar" style={{height: '65%'}}></div>
+                  </div>
+                  <div className="chart-labels">
+                    <span>Mon</span>
+                    <span>Tue</span>
+                    <span>Wed</span>
+                    <span>Thu</span>
+                    <span>Fri</span>
+                    <span>Sat</span>
+                    <span>Sun</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Attendance Weekly Chart */}
+              <div className="chart-container">
+                <h3>Attendance Weekly Chart</h3>
+                <div className="chart-placeholder">
+                  <div className="line-chart">
+                    <svg viewBox="0 0 300 150" className="chart-svg">
+                      <polyline
+                        fill="none"
+                        stroke="#4facfe"
+                        strokeWidth="2"
+                        points="20,120 50,100 80,80 110,90 140,70 170,85 200,60 230,75 260,50 290,65"
+                      />
+                      <polyline
+                        fill="none"
+                        stroke="#00ff88"
+                        strokeWidth="2"
+                        points="20,100 50,85 80,95 110,75 140,90 170,70 200,80 230,60 260,75 290,55"
+                      />
+                    </svg>
+                  </div>
+                  <div className="chart-legend">
+                    <div className="legend-item">
+                      <div className="legend-color" style={{backgroundColor: '#4facfe'}}></div>
+                      <span>Present</span>
+                    </div>
+                    <div className="legend-item">
+                      <div className="legend-color" style={{backgroundColor: '#00ff88'}}></div>
+                      <span>Late</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
