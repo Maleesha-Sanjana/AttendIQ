@@ -61,8 +61,33 @@ const LandingPage = () => {
   ]
 
   const handleSidebarClick = (index, label) => {
+    console.log('Sidebar clicked:', { index, label, cameraState })
+    
+    // Prevent navigation if camera is in a restricted state
+    if (cameraState.navigationDisabled) {
+      console.log('Navigation blocked due to camera state')
+      if (cameraState.isLoading) {
+        toast.error('Please wait for camera to initialize')
+      } else if (cameraState.needsPermission) {
+        toast.error('Please grant camera permission first')
+      } else if (cameraState.hasError) {
+        toast.error('Please resolve camera issues first')
+      } else if (cameraState.isScanning) {
+        toast.error('Face scanning in progress, please wait')
+      } else {
+        toast.error('Navigation temporarily disabled')
+      }
+      return
+    }
+    
+    console.log('Navigation allowed, switching to:', label)
     setActiveTab(index)
     toast.success(`Switched to ${label} view`)
+  }
+
+  const handleCameraStateChange = (newState) => {
+    console.log('Camera state changed:', newState)
+    setCameraState(newState)
   }
 
   const handleLogin = (userType) => {
@@ -146,7 +171,10 @@ const LandingPage = () => {
 
         {/* Face Recognition Area */}
         <div className="recognition-area">
-          <FaceRecognition onAttendanceMarked={handleAttendanceMarked} />
+          <FaceRecognition 
+            onAttendanceMarked={handleAttendanceMarked}
+            onCameraStateChange={handleCameraStateChange}
+          />
         </div>
       </div>
     </div>
