@@ -1268,3 +1268,195 @@
     margin: 1rem 0;
   }
 }
+/* Lecturer Dashboard Specific Styles */
+.lecturer-analytics-content {
+  width: 100%;
+  height: 100%;
+  background: rgba(45, 55, 72, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 2rem;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.lecturer-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.lecturer-stat-card {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.lecturer-stat-card:hover {
+  border-color: #4facfe;
+  transform: translateY(-2px);
+}
+
+.stat-value {
+  color: #ffffff;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.stat-sublabel {
+  color: #00ff88;
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.stat-icon-corner {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: #4facfe;
+  opacity: 0.7;
+}
+
+.lecturer-charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  flex: 1;
+}
+
+.chart-container {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-container h3 {
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chart-placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Bar Chart Styles */
+.bar-chart {
+  display: flex;
+  align-items: end;
+  gap: 0.5rem;
+  height: 120px;
+  padding: 0 1rem;
+}
+
+.bar {
+  width: 20px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px 2px 0 0;
+  transition: all 0.3s ease;
+}
+
+.bar.active {
+  background: #4facfe;
+}
+
+.bar:hover {
+  background: #4facfe;
+}
+
+.chart-labels {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0 1rem;
+}
+
+.chart-labels span {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  width: 20px;
+  text-align: center;
+}
+
+/* Line Chart Styles */
+.line-chart {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8rem;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+/* Responsive Design for Lecturer Dashboard */
+@media (max-width: 1200px) {
+  .lecturer-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .lecturer-charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .lecturer-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .lecturer-analytics-content {
+    padding: 1rem;
+  }
+  
+  .stat-value {
+    font-size: 2rem;
+  }
+}
