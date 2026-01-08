@@ -1460,3 +1460,205 @@
     font-size: 2rem;
   }
 }
+/* Report Generating Styles */
+.report-generating-content {
+  width: 100%;
+  height: 100%;
+  background: rgba(45, 55, 72, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 2rem;
+  overflow: hidden; /* Remove scrolling */
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Reduced gap */
+}
+
+.report-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem; /* Reduced gap */
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.report-card {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem; /* Reduced padding */
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.report-card:hover {
+  border-color: #4facfe;
+  transform: translateY(-2px);
+}
+
+.report-card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.report-card h3 {
+  color: #ffffff;
+  font-size: 0.9rem; /* Reduced font size */
+  font-weight: 600;
+  margin: 0;
+}
+
+.download-report-btn {
+  background: #4facfe;
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 35px; /* Reduced size */
+  height: 35px; /* Reduced size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.download-report-btn:hover {
+  background: #3d8bfe;
+  transform: scale(1.1);
+}
+
+.monthly-chart-container {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem; /* Reduced padding */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Allow shrinking */
+}
+
+.monthly-chart-container h3 {
+  color: #ffffff;
+  font-size: 1rem; /* Reduced font size */
+  font-weight: 600;
+  margin: 0 0 1rem 0; /* Reduced margin */
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.chart-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px; /* Set minimum height */
+  max-height: 300px; /* Set maximum height */
+}
+
+.chart-grid {
+  display: flex;
+  flex: 1;
+  gap: 1rem;
+}
+
+.y-axis-labels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-right: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  width: 40px;
+  flex-shrink: 0;
+}
+
+.chart-content {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+}
+
+.monthly-chart-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.x-axis-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0 0 50px; /* Reduced padding */
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+/* Responsive Design for Report Generating */
+@media (max-width: 1200px) {
+  .report-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .report-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .report-generating-content {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .chart-area {
+    min-height: 150px;
+    max-height: 200px;
+  }
+  
+  .x-axis-labels {
+    padding-left: 30px;
+    font-size: 0.7rem;
+  }
+  
+  .y-axis-labels {
+    width: 30px;
+    font-size: 0.7rem;
+  }
+  
+  .report-card h3 {
+    font-size: 0.8rem;
+  }
+  
+  .download-report-btn {
+    width: 30px;
+    height: 30px;
+  }
+}
+/* Back Button in Navigation */
+.back-btn-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.back-btn-nav:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}

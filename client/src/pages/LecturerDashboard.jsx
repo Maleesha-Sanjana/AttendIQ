@@ -1,17 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
-  LayoutDashboard,
-  PieChart,
-  FileBarChart,
-  Folder,
-  Users,
-  Sun,
-  Search,
-  BookOpen,
-  Calendar,
-  Clock,
-  TrendingUp
+  BarChart3,
+  TrendingUp,
+  FileText,
+  Settings,
+  User,
+  Sun
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { mockApi } from '../services/mockApi'
@@ -140,11 +135,11 @@ const LecturerDashboard = () => {
   }
 
   const sidebarItems = [
-    { icon: LayoutDashboard, label: 'Dashboard' },
-    { icon: PieChart, label: 'Analytics' },
-    { icon: FileBarChart, label: 'Reports' },
-    { icon: Folder, label: 'Files' },
-    { icon: Users, label: 'Users' }
+    { icon: BarChart3, label: 'Dashboard' },
+    { icon: TrendingUp, label: 'Analytics' },
+    { icon: FileText, label: 'Reports' },
+    { icon: Settings, label: 'Settings' },
+    { icon: User, label: 'Profile' }
   ]
 
   const handleSidebarClick = (index, label) => {
@@ -192,7 +187,7 @@ const LecturerDashboard = () => {
         
         <div className="profile-section">
           <div className="profile-avatar">
-            <Users size={32} />
+            <User size={32} />
           </div>
           <div className="profile-name">MALEESHA SANJANA</div>
         </div>
@@ -243,7 +238,7 @@ const LecturerDashboard = () => {
                 <div className="stat-value">452</div>
                 <div className="stat-label">Total Students</div>
                 <div className="stat-icon-corner">
-                  <Users size={20} />
+                  <User size={20} />
                 </div>
               </div>
               
@@ -252,7 +247,7 @@ const LecturerDashboard = () => {
                 <div className="stat-label">On Time</div>
                 <div className="stat-sublabel">24% more than yesterday</div>
                 <div className="stat-icon-corner">
-                  <Clock size={20} />
+                  <BarChart3 size={20} />
                 </div>
               </div>
               
@@ -270,7 +265,7 @@ const LecturerDashboard = () => {
                 <div className="stat-label">Early Departures</div>
                 <div className="stat-sublabel">2% less than yesterday</div>
                 <div className="stat-icon-corner">
-                  <Users size={20} />
+                  <FileText size={20} />
                 </div>
               </div>
             </div>
