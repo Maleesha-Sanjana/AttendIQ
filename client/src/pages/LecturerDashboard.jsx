@@ -2,17 +2,19 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { 
-  BarChart3, 
-  TrendingUp, 
-  FileText, 
-  Settings, 
-  User,
+  LayoutDashboard,
+  PieChart,
+  FileBarChart,
+  Folder,
+  Users,
   Sun,
   Search,
   Calendar,
   Download
 } from 'lucide-react'
 import toast from 'react-hot-toast'
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
 import { mockApi } from '../services/mockApi'
 import './Dashboard.css'
 
@@ -39,6 +41,8 @@ const LecturerDashboard = () => {
       try {
         setLoading(true)
         // Mock attendance data that matches the interface
+        const today = new Date().toISOString().split('T')[0] // Today's date in YYYY-MM-DD format
+        
         const mockAttendance = [
           { id: '2341421', name: 'Maleesha Sanjana', building: 'Dortian', faculty: 'Computing', date: '2025-11-05', status: 'Early Arrived', checkin: '09:00', checkout: '16:00' },
           { id: '3411421', name: 'Denuka Manujaya', building: 'Zenith', faculty: 'Management', date: '2025-11-05', status: 'Absent', checkin: '---', checkout: '16:00' },
@@ -50,7 +54,11 @@ const LecturerDashboard = () => {
           { id: '2342024', name: 'Thilini Fernando', building: 'Aurora', faculty: 'Computing', date: '2026-01-08', status: 'Early Arrived', checkin: '08:30', checkout: '16:00' },
           { id: '2342125', name: 'Ravindu Jayasinghe', building: 'Nexus', faculty: 'Engineering', date: '2026-01-08', status: 'On Time', checkin: '09:00', checkout: '16:00' },
           { id: '2342226', name: 'Sanduni Wickramasinghe', building: 'Vertex', faculty: 'Humanities', date: '2026-01-07', status: 'Absent', checkin: '---', checkout: '---' },
-          { id: '2342327', name: 'Chamara Rathnayake', building: 'Summit', faculty: 'Management', date: '2026-01-07', status: 'On Time', checkin: '09:45', checkout: '16:00' }
+          { id: '2342327', name: 'Chamara Rathnayake', building: 'Summit', faculty: 'Management', date: '2026-01-07', status: 'On Time', checkin: '09:45', checkout: '16:00' },
+          // Today's records
+          { id: '2342428', name: 'Amara Jayawardena', building: 'Crystal', faculty: 'Computing', date: today, status: 'Early Arrived', checkin: '08:45', checkout: '16:00' },
+          { id: '2342529', name: 'Dilshan Mendis', building: 'Platinum', faculty: 'Engineering', date: today, status: 'On Time', checkin: '09:30', checkout: '16:00' },
+          { id: '2342630', name: 'Ishara Gunasekara', building: 'Diamond', faculty: 'Management', date: today, status: 'Early Arrived', checkin: '08:15', checkout: '16:00' }
         ]
         setAttendanceData(mockAttendance)
         setFilteredData(mockAttendance) // Initialize filtered data
@@ -118,12 +126,22 @@ const LecturerDashboard = () => {
     return `${day} ${month} ${year}`
   }
 
+  const formatDisplayDate = (dateString) => {
+    if (!dateString) return ''
+    const date = new Date(dateString)
+    const day = date.getDate()
+    const month = date.toLocaleDateString('en-US', { month: 'long' })
+    const year = date.getFullYear()
+    
+    return `${day} ${month} ${year}`
+  }
+
   const sidebarItems = [
-    { icon: BarChart3, label: 'Dashboard' },
-    { icon: TrendingUp, label: 'Analytics' },
-    { icon: FileText, label: 'Reports' },
-    { icon: Settings, label: 'Settings' },
-    { icon: User, label: 'Profile' }
+    { icon: LayoutDashboard, label: 'Dashboard' },
+    { icon: PieChart, label: 'Analytics' },
+    { icon: FileBarChart, label: 'Reports' },
+    { icon: Folder, label: 'Files' },
+    { icon: Users, label: 'Users' }
   ]
 
   const handleSidebarClick = (index, label) => {
@@ -138,14 +156,105 @@ const LecturerDashboard = () => {
     setSelectedDate(e.target.value)
   }
 
-  const formatDisplayDate = (dateString) => {
-    if (!dateString) return ''
-    const date = new Date(dateString)
-    const day = date.getDate()
-    const month = date.toLocaleDateString('en-US', { month: 'long' })
-    const year = date.getFullYear()
-    
-    return `${day} ${month} ${year}`
+  const generatePDF = () => {
+    try {
+      console.log('Starting PDF generation...')
+      console.log('Filtered data:', filteredData)
+      
+      // Create a new jsPDF instance
+      const doc = new jsPDF()
+      
+      // Test basic PDF functionality first
+      doc.setFontSize(20)
+      doc.text('ATTENDIQ - Attendance Report', 20, 20)
+      
+      // Get current date and time for the report
+      const now = new Date()
+      const reportDate = now.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+      const reportTime = now.toLocaleTimeString('en-US', {
+        hour12: true,
+        hour: 'numeric',
+        minute: '2-digit'
+      })
+
+      // Add basic info
+      doc.setFontSize(12)
+      doc.text(`Generated on: ${reportDate} at ${reportTime}`, 20, 35)
+      doc.text(`Total Records: ${filteredData.length}`, 20, 45)
+      
+      // Determine filter info
+      let filterInfo = 'All Records'
+      if (selectedDate && searchQuery) {
+        filterInfo = `Date: ${formatDisplayDate(selectedDate)}, Student: "${searchQuery}"`
+      } else if (selectedDate) {
+        filterInfo = `Date: ${formatDisplayDate(selectedDate)}`
+      } else if (searchQuery) {
+        filterInfo = `Student: "${searchQuery}"`
+      }
+      
+      doc.text(`Filter: ${filterInfo}`, 20, 55)
+
+      // Add simple text-based table instead of autoTable for now
+      doc.setFontSize(10)
+      let yPosition = 70
+      
+      // Table header
+      doc.text('ID', 20, yPosition)
+      doc.text('Student Name', 40, yPosition)
+      doc.text('Building', 90, yPosition)
+      doc.text('Faculty', 120, yPosition)
+      doc.text('Status', 150, yPosition)
+      
+      yPosition += 10
+      
+      // Table rows (limit to first 10 for testing)
+      const limitedData = filteredData.slice(0, 10)
+      limitedData.forEach((record, index) => {
+        if (yPosition > 250) { // Start new page if needed
+          doc.addPage()
+          yPosition = 20
+        }
+        
+        doc.text(record.id, 20, yPosition)
+        doc.text(record.name, 40, yPosition)
+        doc.text(record.building, 90, yPosition)
+        doc.text(record.faculty, 120, yPosition)
+        doc.text(record.status, 150, yPosition)
+        
+        yPosition += 8
+      })
+
+      // Generate filename
+      const timestamp = now.toISOString().split('T')[0]
+      let filename = `attendance-report-${timestamp}`
+      
+      if (selectedDate && searchQuery) {
+        filename = `attendance-${selectedDate}-${searchQuery.replace(/\s+/g, '-')}-${timestamp}`
+      } else if (selectedDate) {
+        filename = `attendance-${selectedDate}-${timestamp}`
+      } else if (searchQuery) {
+        filename = `attendance-${searchQuery.replace(/\s+/g, '-')}-${timestamp}`
+      }
+      
+      filename += '.pdf'
+
+      console.log('Saving PDF with filename:', filename)
+
+      // Save the PDF
+      doc.save(filename)
+      
+      toast.success(`PDF report generated successfully! (${filteredData.length} records)`)
+      console.log('PDF generation completed successfully')
+      
+    } catch (error) {
+      console.error('Detailed PDF generation error:', error)
+      console.error('Error stack:', error.stack)
+      toast.error(`Failed to generate PDF report: ${error.message}`)
+    }
   }
 
   const handleLogout = async () => {
@@ -176,17 +285,6 @@ const LecturerDashboard = () => {
 
   if (loading) {
     return (
-      <div className="dashboard-container lecturer">
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <p>Loading dashboard...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (loading) {
-    return (
       <div className="admin-dashboard-container">
         <div className="loading-spinner">
           <div className="spinner"></div>
@@ -207,7 +305,7 @@ const LecturerDashboard = () => {
         
         <div className="profile-section">
           <div className="profile-avatar">
-            <User size={32} />
+            <Users size={32} />
           </div>
           <div className="profile-name">MALEESHA SANJANA</div>
         </div>
@@ -280,7 +378,7 @@ const LecturerDashboard = () => {
                     ×
                   </button>
                 </div>
-                <button className="generate-report-btn">
+                <button className="generate-report-btn" onClick={generatePDF}>
                   <Download size={16} />
                   Generate Reports
                 </button>
