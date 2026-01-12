@@ -145,6 +145,19 @@ const LecturerDashboard = () => {
   const handleSidebarClick = (index, label) => {
     if (label === 'Profile') {
       navigate('/lecturer-profile')
+    } else if (label === 'Analytics' || label === 'Reports' || label === 'Settings') {
+      // Show no access popup for restricted tabs
+      toast.error('No access for you', {
+        duration: 2000,
+        style: {
+          background: 'rgba(255, 68, 68, 0.9)',
+          color: '#ffffff',
+          border: '1px solid rgba(255, 68, 68, 0.3)',
+          borderRadius: '8px',
+          fontSize: '0.9rem',
+          fontWeight: '500'
+        }
+      })
     } else {
       setActiveTab(index)
     }
@@ -225,7 +238,11 @@ const LecturerDashboard = () => {
           {sidebarItems.map((item, index) => (
             <div
               key={index}
-              className={`sidebar-item ${activeTab === index ? 'active' : ''}`}
+              className={`sidebar-item ${activeTab === index ? 'active' : ''} ${
+                item.label === 'Analytics' || item.label === 'Reports' || item.label === 'Settings' 
+                  ? 'restricted' 
+                  : ''
+              }`}
               onClick={() => handleSidebarClick(index, item.label)}
             >
               <item.icon size={20} />
