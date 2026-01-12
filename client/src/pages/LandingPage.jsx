@@ -16,6 +16,13 @@ const LandingPage = () => {
   const navigate = useNavigate()
   const [currentTime, setCurrentTime] = useState(new Date())
   const [activeTab, setActiveTab] = useState(0)
+  const [cameraState, setCameraState] = useState({
+    isLoading: false,
+    needsPermission: false,
+    hasError: false,
+    isScanning: false,
+    navigationDisabled: false
+  })
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -63,7 +70,23 @@ const LandingPage = () => {
   const handleSidebarClick = (index, label) => {
     console.log('Sidebar clicked:', { index, label, cameraState })
     
-    // Prevent navigation if camera is in a restricted state
+    // Show "No access for you" popup for Analytics, Reports, Settings, and Profile
+    if (label === 'Analytics' || label === 'Reports' || label === 'Settings' || label === 'Profile') {
+      toast.error('No access for you', {
+        duration: 2000,
+        style: {
+          background: 'rgba(255, 68, 68, 0.9)',
+          color: '#ffffff',
+          border: '1px solid rgba(255, 68, 68, 0.3)',
+          borderRadius: '8px',
+          fontSize: '0.9rem',
+          fontWeight: '500'
+        }
+      })
+      return
+    }
+    
+    // Prevent navigation if camera is in a restricted state (only for Dashboard)
     if (cameraState.navigationDisabled) {
       console.log('Navigation blocked due to camera state')
       if (cameraState.isLoading) {
@@ -161,7 +184,11 @@ const LandingPage = () => {
           {sidebarItems.map((item, index) => (
             <div
               key={index}
-              className={`sidebar-item ${activeTab === index ? 'active' : ''}`}
+              className={`sidebar-item ${activeTab === index ? 'active' : ''} ${
+                item.label === 'Analytics' || item.label === 'Reports' || item.label === 'Settings' || item.label === 'Profile'
+                  ? 'restricted' 
+                  : ''
+              }`}
               onClick={() => handleSidebarClick(index, item.label)}
             >
               <item.icon size={20} />

@@ -369,3 +369,42 @@
     margin: 1rem 0;
   }
 }
+/* Restricted sidebar item styles for Landing Page */
+.sidebar-item.restricted {
+  cursor: not-allowed;
+  opacity: 0.6;
+  position: relative;
+}
+
+.sidebar-item.restricted:hover {
+  background: rgba(255, 68, 68, 0.2);
+  border-color: rgba(255, 68, 68, 0.3);
+  transform: none;
+}
+
+.sidebar-item.restricted::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 68, 68, 0.1) 30%, rgba(255, 68, 68, 0.1) 70%, transparent 70%);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.sidebar-item.restricted:hover::after {
+  content: '🚫';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 12px;
+  background: rgba(255, 68, 68, 0.9);
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
