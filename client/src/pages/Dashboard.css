@@ -861,6 +861,26 @@
   background: #3d7bc6;
 }
 
+.user-registration-btn {
+  background: #00ff88;
+  color: #1a1a2e;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-registration-btn:hover {
+  background: #00e077;
+  transform: translateY(-1px);
+}
+
 /* Sidebar - Same as Landing Page */
 .sidebar {
   position: absolute;
@@ -959,6 +979,13 @@
   font-size: 0.9rem;
   position: relative;
   transition: all 0.3s ease;
+  min-width: 160px;
+  cursor: pointer;
+}
+
+.date-filter:hover {
+  border-color: rgba(74, 144, 226, 0.4);
+  background: rgba(74, 144, 226, 0.15);
 }
 
 .date-filter:focus-within {
@@ -967,26 +994,38 @@
   box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
 }
 
-.date-input {
-  background: transparent;
-  border: none;
-  color: #ffffff;
-  outline: none;
+.all-date-text {
+  color: rgba(255, 255, 255, 0.9);
   font-size: 0.9rem;
-  cursor: pointer;
-  min-width: 120px;
+  font-weight: 500;
+  flex: 1;
 }
 
-.date-input::-webkit-calendar-picker-indicator {
-  filter: invert(1);
-  cursor: pointer;
+.selected-date-text {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  flex: 1;
 }
 
-.date-placeholder {
-  color: rgba(255, 255, 255, 0.7);
-  pointer-events: none;
+.date-input-hidden {
   position: absolute;
-  left: 2.5rem;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.date-input-hidden::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }
 
 .clear-date-btn {
@@ -1003,6 +1042,9 @@
   font-size: 14px;
   font-weight: bold;
   transition: all 0.3s ease;
+  flex-shrink: 0;
+  z-index: 2;
+  position: relative;
 }
 
 .clear-date-btn:hover {
@@ -1262,6 +1304,24 @@
   .nav-right {
     flex-direction: column;
     gap: 0.5rem;
+  }
+  
+  .user-registration-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .logout-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.8rem;
+  }
+  
+  .search-container {
+    width: 100%;
+  }
+  
+  .search-container input {
+    width: 100%;
   }
   
   .top-nav {

@@ -10,10 +10,12 @@ import {
   Sun,
   Search,
   Calendar,
-  Download
+  Download,
+  UserPlus
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { mockApi } from '../services/mockApi'
+import UserRegistration from '../components/UserRegistration'
 import './Dashboard.css'
 
 const AdminDashboard = () => {
@@ -23,8 +25,9 @@ const AdminDashboard = () => {
   const [attendanceData, setAttendanceData] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]) // Today's date
+  const [selectedDate, setSelectedDate] = useState('') // Empty string to show all data by default
   const [loading, setLoading] = useState(true)
+  const [showUserRegistration, setShowUserRegistration] = useState(false)
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -164,6 +167,14 @@ const AdminDashboard = () => {
     }
   }
 
+  const handleUserRegistration = () => {
+    setShowUserRegistration(true)
+  }
+
+  const handleCloseUserRegistration = () => {
+    setShowUserRegistration(false)
+  }
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'Early Arrived':
@@ -233,6 +244,10 @@ const AdminDashboard = () => {
                 onChange={handleSearchChange}
               />
             </div>
+            <button className="user-registration-btn" onClick={handleUserRegistration}>
+              <UserPlus size={16} />
+              User Registration
+            </button>
             <button className="logout-btn" onClick={handleLogout}>LogOut</button>
           </div>
         </nav>
@@ -258,19 +273,26 @@ const AdminDashboard = () => {
               <div className="overview-controls">
                 <div className="date-filter">
                   <Calendar size={16} />
+                  {selectedDate ? (
+                    <>
+                      <span className="selected-date-text">{formatDisplayDate(selectedDate)}</span>
+                      <button 
+                        className="clear-date-btn"
+                        onClick={() => setSelectedDate('')}
+                        title="Clear date filter to show all data"
+                      >
+                        ×
+                      </button>
+                    </>
+                  ) : (
+                    <span className="all-date-text">All Date</span>
+                  )}
                   <input 
                     type="date" 
                     value={selectedDate}
                     onChange={handleDateChange}
-                    className="date-input"
+                    className="date-input-hidden"
                   />
-                  <button 
-                    className="clear-date-btn"
-                    onClick={() => setSelectedDate('')}
-                    title="Clear date filter"
-                  >
-                    ×
-                  </button>
                 </div>
                 <button className="generate-report-btn" onClick={handleGenerateReports}>
                   <Download size={16} />
@@ -314,7 +336,14 @@ const AdminDashboard = () => {
                   ) : (
                     <tr>
                       <td colSpan="8" style={{ textAlign: 'center', padding: '2rem', color: 'rgba(255, 255, 255, 0.5)' }}>
-                        {searchQuery ? `No students found matching "${searchQuery}"` : 'No attendance records found'}
+                        {searchQuery && selectedDate 
+                          ? `No students found matching "${searchQuery}" for ${formatDisplayDate(selectedDate)}`
+                          : searchQuery 
+                            ? `No students found matching "${searchQuery}"`
+                            : selectedDate
+                              ? `No attendance records found for ${formatDisplayDate(selectedDate)}`
+                              : 'No attendance records found'
+                        }
                       </td>
                     </tr>
                   )}
@@ -325,7 +354,7 @@ const AdminDashboard = () => {
                 <span>
                   {searchQuery || selectedDate
                     ? `Showing ${filteredData.length} of ${attendanceData.length} records${selectedDate ? ` for ${formatDisplayDate(selectedDate)}` : ''}${searchQuery ? ` matching "${searchQuery}"` : ''}`
-                    : `Page 1 of 100`
+                    : `Showing all ${filteredData.length} attendance records`
                   }
                 </span>
               </div>
@@ -333,6 +362,12 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* User Registration Modal */}
+      <UserRegistration 
+        isOpen={showUserRegistration} 
+        onClose={handleCloseUserRegistration} 
+      />
     </div>
   )
 }
