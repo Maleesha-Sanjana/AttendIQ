@@ -143,7 +143,11 @@ const LecturerDashboard = () => {
   ]
 
   const handleSidebarClick = (index, label) => {
-    setActiveTab(index)
+    if (label === 'Profile') {
+      navigate('/lecturer-profile')
+    } else {
+      setActiveTab(index)
+    }
   }
 
   const handleLogout = async () => {
