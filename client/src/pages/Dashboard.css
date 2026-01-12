@@ -897,6 +897,13 @@
   justify-content: center;
 }
 
+/* Position notification at the top */
+.sidebar-item.notification {
+  position: absolute;
+  top: 2rem;
+  left: 0.5rem;
+}
+
 .sidebar-item {
   width: 50px;
   height: 50px;
@@ -1299,6 +1306,12 @@
     transform: none;
     justify-content: center;
     margin: 1rem 0;
+  }
+  
+  .sidebar-item.notification {
+    position: static;
+    top: auto;
+    left: auto;
   }
   
   .nav-right {
@@ -1966,5 +1979,28 @@
 
 /* Notification sidebar item styles */
 .sidebar-item.notification {
-  position: relative;
+  position: absolute;
+  top: 2rem;
+  left: 0.5rem;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.sidebar-item.notification:hover {
+  background: rgba(79, 172, 254, 0.2);
+  border-color: #4facfe;
+}
+
+.sidebar-item.notification.active {
+  background: #4facfe;
+  border-color: #4facfe;
 }
