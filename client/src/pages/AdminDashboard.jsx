@@ -11,7 +11,8 @@ import {
   Search,
   Calendar,
   Download,
-  UserPlus
+  UserPlus,
+  Bell
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { mockApi } from '../services/mockApi'
@@ -28,6 +29,11 @@ const AdminDashboard = () => {
   const [selectedDate, setSelectedDate] = useState('') // Empty string to show all data by default
   const [loading, setLoading] = useState(true)
   const [showUserRegistration, setShowUserRegistration] = useState(false)
+  const [notifications, setNotifications] = useState([
+    { id: 1, message: 'New student registration pending approval', time: '5 min ago', type: 'info' },
+    { id: 2, message: 'Low attendance alert for Computing Faculty', time: '15 min ago', type: 'warning' },
+    { id: 3, message: 'System maintenance scheduled for tonight', time: '1 hour ago', type: 'info' }
+  ])
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -130,6 +136,7 @@ const AdminDashboard = () => {
   }
 
   const sidebarItems = [
+    { icon: Bell, label: 'Notifications' },
     { icon: BarChart3, label: 'Dashboard' },
     { icon: TrendingUp, label: 'Analytics' },
     { icon: FileText, label: 'Reports' },
@@ -257,7 +264,7 @@ const AdminDashboard = () => {
           {sidebarItems.map((item, index) => (
             <div
               key={index}
-              className={`sidebar-item ${activeTab === index ? 'active' : ''}`}
+              className={`sidebar-item ${activeTab === index ? 'active' : ''} ${item.label === 'Notifications' ? 'notification' : ''}`}
               onClick={() => handleSidebarClick(index, item.label)}
             >
               <item.icon size={20} />

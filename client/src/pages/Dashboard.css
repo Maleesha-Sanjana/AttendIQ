@@ -1963,3 +1963,8 @@
   align-items: center;
   justify-content: center;
 }
+
+/* Notification sidebar item styles */
+.sidebar-item.notification {
+  position: relative;
+}
