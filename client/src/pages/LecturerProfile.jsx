@@ -4,9 +4,9 @@ import {
   BarChart3,
   TrendingUp,
   FileText,
-  Settings,
   User,
-  Sun
+  Sun,
+  Bell
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { mockApi } from '../services/mockApi'
@@ -15,7 +15,7 @@ import './Dashboard.css'
 const LecturerProfile = () => {
   const navigate = useNavigate()
   const [currentTime, setCurrentTime] = useState(new Date())
-  const [activeTab, setActiveTab] = useState(4) // Profile tab is active
+  const [activeTab, setActiveTab] = useState(4) // Profile tab is active (index changed due to Notifications icon)
   const [loading, setLoading] = useState(true)
   const [todayTasks, setTodayTasks] = useState([])
 
@@ -90,6 +90,7 @@ const LecturerProfile = () => {
   }
 
   const sidebarItems = [
+    { icon: Bell, label: 'Notifications' },
     { icon: BarChart3, label: 'Dashboard' },
     { icon: TrendingUp, label: 'Analytics' },
     { icon: FileText, label: 'Reports' },
@@ -97,7 +98,9 @@ const LecturerProfile = () => {
   ]
 
   const handleSidebarClick = (index, label) => {
-    if (index === 0) {
+    if (label === 'Notifications') {
+      navigate('/lecturer-notifications')
+    } else if (index === 1) {
       navigate('/lecturer-overview')
     } else if (label === 'Analytics' || label === 'Reports') {
       // Show no access popup for restricted tabs

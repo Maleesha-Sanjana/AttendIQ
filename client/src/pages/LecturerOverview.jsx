@@ -4,9 +4,9 @@ import {
   BarChart3,
   TrendingUp,
   FileText,
-  Settings,
   User,
-  Sun
+  Sun,
+  Bell
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { mockApi } from '../services/mockApi'
@@ -70,6 +70,7 @@ const LecturerOverview = () => {
   }
 
   const sidebarItems = [
+    { icon: Bell, label: 'Notifications' },
     { icon: BarChart3, label: 'Dashboard' },
     { icon: TrendingUp, label: 'Analytics' },
     { icon: FileText, label: 'Reports' },
@@ -77,7 +78,9 @@ const LecturerOverview = () => {
   ]
 
   const handleSidebarClick = (index, label) => {
-    if (label === 'Dashboard') {
+    if (label === 'Notifications') {
+      navigate('/lecturer-notifications')
+    } else if (label === 'Dashboard') {
       navigate('/lecturer-overview')
     } else if (label === 'Profile') {
       navigate('/lecturer-profile')
