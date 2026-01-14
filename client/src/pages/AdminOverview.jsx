@@ -17,7 +17,6 @@ const AdminOverview = () => {
   const navigate = useNavigate()
   const [currentTime, setCurrentTime] = useState(new Date())
   const [activeTab, setActiveTab] = useState(2) // Analytics icon is active
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -25,22 +24,6 @@ const AdminOverview = () => {
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [])
-
-  useEffect(() => {
-    const loadAdminData = async () => {
-      try {
-        setLoading(true)
-        // Simulate loading data
-        await new Promise(resolve => setTimeout(resolve, 500))
-      } catch (error) {
-        console.error('Error loading admin data:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadAdminData()
   }, [])
 
   const formatTime = (date) => {
@@ -106,17 +89,6 @@ const AdminOverview = () => {
       toast.error('Logout failed')
       navigate('/')
     }
-  }
-
-  if (loading) {
-    return (
-      <div className="admin-dashboard-container">
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <p>Loading analytics...</p>
-        </div>
-      </div>
-    )
   }
 
   return (
