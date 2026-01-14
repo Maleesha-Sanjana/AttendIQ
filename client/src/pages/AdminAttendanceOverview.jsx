@@ -145,6 +145,10 @@ const AdminAttendanceOverview = () => {
     if (label === 'Dashboard') {
       navigate('/admin-attendance-overview')
     }
+    // Navigate to admin overview when Analytics icon is clicked
+    else if (label === 'Analytics') {
+      navigate('/admin-overview')
+    }
     // Navigate to admin report generating page when Reports icon is clicked
     else if (label === 'Reports') {
       navigate('/admin-report-generating')

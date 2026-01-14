@@ -5,6 +5,7 @@ import LecturerLogin from './pages/LecturerLogin'
 import StudentDashboard from './pages/StudentDashboard'
 import AdminDashboard from './pages/AdminDashboard'
 import AdminAttendanceOverview from './pages/AdminAttendanceOverview'
+import AdminOverview from './pages/AdminOverview'
 import LecturerDashboard from './pages/LecturerDashboard'
 import LecturerOverview from './pages/LecturerOverview'
 import LecturerProfile from './pages/LecturerProfile'
@@ -22,6 +23,7 @@ function App() {
         <Route path="/student-dashboard" element={<StudentDashboard />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/admin-attendance-overview" element={<AdminAttendanceOverview />} />
+        <Route path="/admin-overview" element={<AdminOverview />} />
         <Route path="/lecturer-dashboard" element={<LecturerDashboard />} />
         <Route path="/lecturer-overview" element={<LecturerOverview />} />
         <Route path="/lecturer-profile" element={<LecturerProfile />} />
