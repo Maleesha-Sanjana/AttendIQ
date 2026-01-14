@@ -138,7 +138,6 @@ const LecturerDashboard = () => {
     { icon: BarChart3, label: 'Dashboard' },
     { icon: TrendingUp, label: 'Analytics' },
     { icon: FileText, label: 'Reports' },
-    { icon: Settings, label: 'Settings' },
     { icon: User, label: 'Profile' }
   ]
 
@@ -147,7 +146,7 @@ const LecturerDashboard = () => {
       navigate('/lecturer-overview')
     } else if (label === 'Profile') {
       navigate('/lecturer-profile')
-    } else if (label === 'Analytics' || label === 'Reports' || label === 'Settings') {
+    } else if (label === 'Analytics' || label === 'Reports') {
       // Show no access popup for restricted tabs
       toast.error('No access for you', {
         duration: 2000,
@@ -241,7 +240,7 @@ const LecturerDashboard = () => {
             <div
               key={index}
               className={`sidebar-item ${activeTab === index ? 'active' : ''} ${
-                item.label === 'Analytics' || item.label === 'Reports' || item.label === 'Settings' 
+                item.label === 'Analytics' || item.label === 'Reports' 
                   ? 'restricted' 
                   : ''
               }`}

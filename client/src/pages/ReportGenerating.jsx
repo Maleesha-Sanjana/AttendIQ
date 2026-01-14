@@ -96,7 +96,6 @@ const ReportGenerating = () => {
     { icon: BarChart3, label: 'Dashboard' },
     { icon: TrendingUp, label: 'Analytics' },
     { icon: FileText, label: 'Reports' },
-    { icon: Settings, label: 'Settings' },
     { icon: User, label: 'Profile' }
   ]
 

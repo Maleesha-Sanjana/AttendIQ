@@ -97,15 +97,18 @@ const AdminReportGenerating = () => {
     { icon: BarChart3, label: 'Dashboard' },
     { icon: TrendingUp, label: 'Analytics' },
     { icon: FileText, label: 'Reports' },
-    { icon: Settings, label: 'Settings' },
     { icon: User, label: 'Profile' }
   ]
 
   const handleSidebarClick = (index, label) => {
     setActiveTab(index)
     
+    // Navigate to admin notifications when Notifications icon is clicked
+    if (label === 'Notifications') {
+      navigate('/admin-notifications')
+    }
     // Navigate to admin attendance overview when Dashboard icon is clicked
-    if (label === 'Dashboard') {
+    else if (label === 'Dashboard') {
       navigate('/admin-attendance-overview')
     }
     // Navigate to admin overview when Analytics icon is clicked
@@ -115,6 +118,10 @@ const AdminReportGenerating = () => {
     // Stay on report generating page when Reports icon is clicked
     else if (label === 'Reports') {
       navigate('/admin-report-generating')
+    }
+    // Navigate to admin profile when Profile icon is clicked
+    else if (label === 'Profile') {
+      navigate('/admin-profile')
     }
   }
 
