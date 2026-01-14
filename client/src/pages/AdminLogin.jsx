@@ -77,7 +77,7 @@ const AdminLogin = () => {
     try {
       const response = await mockApi.login(formData.username, formData.password, 'admin')
       toast.success('Login successful!')
-      navigate('/admin-dashboard')
+      navigate('/admin-attendance-overview')
     } catch (error) {
       toast.error(error.message || 'Login failed. Please try again.')
     } finally {
