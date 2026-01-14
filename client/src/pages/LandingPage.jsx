@@ -63,15 +63,14 @@ const LandingPage = () => {
     { icon: BarChart3, label: 'Dashboard' },
     { icon: TrendingUp, label: 'Analytics' },
     { icon: FileText, label: 'Reports' },
-    { icon: Settings, label: 'Settings' },
     { icon: User, label: 'Profile' }
   ]
 
   const handleSidebarClick = (index, label) => {
     console.log('Sidebar clicked:', { index, label, cameraState })
     
-    // Show "No access for you" popup for Analytics, Reports, Settings, and Profile
-    if (label === 'Analytics' || label === 'Reports' || label === 'Settings' || label === 'Profile') {
+    // Show "No access for you" popup for Analytics, Reports, and Profile
+    if (label === 'Analytics' || label === 'Reports' || label === 'Profile') {
       toast.error('No access for you', {
         duration: 2000,
         style: {
@@ -185,7 +184,7 @@ const LandingPage = () => {
             <div
               key={index}
               className={`sidebar-item ${activeTab === index ? 'active' : ''} ${
-                item.label === 'Analytics' || item.label === 'Reports' || item.label === 'Settings' || item.label === 'Profile'
+                item.label === 'Analytics' || item.label === 'Reports' || item.label === 'Profile'
                   ? 'restricted' 
                   : ''
               }`}

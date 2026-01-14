@@ -6,17 +6,17 @@ import {
   FileText,
   Settings,
   User,
-  Sun
+  Sun,
+  Bell
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { mockApi } from '../services/mockApi'
 import './Dashboard.css'
 
-const LecturerProfile = () => {
+const AdminProfile = () => {
   const navigate = useNavigate()
   const [currentTime, setCurrentTime] = useState(new Date())
   const [activeTab, setActiveTab] = useState(4) // Profile tab is active
-  const [loading, setLoading] = useState(true)
   const [todayTasks, setTodayTasks] = useState([])
 
   useEffect(() => {
@@ -28,35 +28,32 @@ const LecturerProfile = () => {
   }, [])
 
   useEffect(() => {
-    const loadProfileData = async () => {
-      try {
-        setLoading(true)
-        
-        // Mock today's tasks data
-        const mockTasks = [
-          {
-            time: '9:00 A.M',
-            lecturer: 'Maleesha Sanjana',
-            task: 'Lecture at Dartion IT Lab 03'
-          },
-          {
-            time: '1:00 P.M',
-            lecturer: 'Maleesha Sanjana', 
-            task: 'Lecture at Dartion Zenith 602'
-          },
-          {
-            time: '3:00 P.M',
-            lecturer: 'Maleesha Sanjana',
-            task: 'Viva at Dartion Lab 4/5'
-          }
-        ]
+    const loadProfileData = () => {
+      // Mock today's tasks data for admin
+      const mockTasks = [
+        {
+          time: '8:00 A.M',
+          person: 'Admin',
+          task: 'Review attendance reports for all faculties'
+        },
+        {
+          time: '10:30 A.M',
+          person: 'Admin', 
+          task: 'Meeting with faculty heads at Admin Office'
+        },
+        {
+          time: '2:00 P.M',
+          person: 'Admin',
+          task: 'System maintenance and user registration approvals'
+        },
+        {
+          time: '4:00 P.M',
+          person: 'Admin',
+          task: 'Generate monthly attendance reports'
+        }
+      ]
 
-        setTodayTasks(mockTasks)
-      } catch (error) {
-        console.error('Error loading profile data:', error)
-      } finally {
-        setLoading(false)
-      }
+      setTodayTasks(mockTasks)
     }
 
     loadProfileData()
@@ -90,6 +87,7 @@ const LecturerProfile = () => {
   }
 
   const sidebarItems = [
+    { icon: Bell, label: 'Notifications' },
     { icon: BarChart3, label: 'Dashboard' },
     { icon: TrendingUp, label: 'Analytics' },
     { icon: FileText, label: 'Reports' },
@@ -97,23 +95,27 @@ const LecturerProfile = () => {
   ]
 
   const handleSidebarClick = (index, label) => {
-    if (index === 0) {
-      navigate('/lecturer-overview')
-    } else if (label === 'Analytics' || label === 'Reports') {
-      // Show no access popup for restricted tabs
-      toast.error('No access for you', {
-        duration: 2000,
-        style: {
-          background: 'rgba(255, 68, 68, 0.9)',
-          color: '#ffffff',
-          border: '1px solid rgba(255, 68, 68, 0.3)',
-          borderRadius: '8px',
-          fontSize: '0.9rem',
-          fontWeight: '500'
-        }
-      })
-    } else {
-      setActiveTab(index)
+    setActiveTab(index)
+    
+    // Navigate to admin notifications when Notifications icon is clicked
+    if (label === 'Notifications') {
+      navigate('/admin-notifications')
+    }
+    // Navigate to admin attendance overview when Dashboard icon is clicked
+    else if (label === 'Dashboard') {
+      navigate('/admin-attendance-overview')
+    }
+    // Navigate to admin overview when Analytics icon is clicked
+    else if (label === 'Analytics') {
+      navigate('/admin-overview')
+    }
+    // Navigate to admin report generating page when Reports icon is clicked
+    else if (label === 'Reports') {
+      navigate('/admin-report-generating')
+    }
+    // Stay on profile page when Profile icon is clicked
+    else if (label === 'Profile') {
+      navigate('/admin-profile')
     }
   }
 
@@ -129,31 +131,20 @@ const LecturerProfile = () => {
     }
   }
 
-  if (loading) {
-    return (
-      <div className="admin-dashboard-container">
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <p>Loading profile...</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="admin-dashboard-container">
-      {/* Left Panel - Same as Landing Page */}
+      {/* Left Panel */}
       <div className="left-panel">
         <div className="brand-section">
           <h1 className="brand-title">ATTENDIQ</h1>
-          <p className="brand-subtitle">YOUR PROFILE</p>
+          <p className="brand-subtitle">ADMIN PROFILE</p>
         </div>
         
         <div className="profile-section">
           <div className="profile-avatar">
             <User size={32} />
           </div>
-          <div className="profile-name">MALEESHA SANJANA</div>
+          <div className="profile-name">ADMIN</div>
         </div>
         
         <div className="time-widget">
@@ -172,7 +163,7 @@ const LecturerProfile = () => {
         {/* Top Navigation */}
         <nav className="top-nav">
           <div className="nav-left">
-            <span className="nav-item active">Lecturer Profile</span>
+            <span className="nav-item active">Admin Profile</span>
             <span className="nav-arrow">➤</span>
           </div>
           <div className="nav-right">
@@ -185,11 +176,7 @@ const LecturerProfile = () => {
           {sidebarItems.map((item, index) => (
             <div
               key={index}
-              className={`sidebar-item ${activeTab === index ? 'active' : ''} ${
-                item.label === 'Analytics' || item.label === 'Reports' 
-                  ? 'restricted' 
-                  : ''
-              }`}
+              className={`sidebar-item ${activeTab === index ? 'active' : ''} ${item.label === 'Notifications' ? 'notification' : ''}`}
               onClick={() => handleSidebarClick(index, item.label)}
             >
               <item.icon size={20} />
@@ -203,13 +190,16 @@ const LecturerProfile = () => {
             {/* Profile Header Section */}
             <div className="profile-header-section">
               <div className="profile-main-info">
-                <div className="profile-avatar-large">
+                <div className="profile-avatar-large" style={{
+                  background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                  boxShadow: '0 10px 30px rgba(79, 172, 254, 0.3)'
+                }}>
                   <User size={80} />
                 </div>
                 <div className="profile-details">
-                  <h1 className="profile-full-name">MALEESHA SANJANA DILSHAN BULATHSINHALA</h1>
-                  <p className="profile-position">SENIOR LECTURER</p>
-                  <p className="profile-faculty">FACULTY OF COMPUTING</p>
+                  <h1 className="profile-full-name">SYSTEM ADMINISTRATOR</h1>
+                  <p className="profile-position">ADMIN</p>
+                  <p className="profile-faculty">ATTENDIQ SYSTEM</p>
                   <p className="profile-campus">CINEC CAMPUS</p>
                 </div>
               </div>
@@ -222,7 +212,7 @@ const LecturerProfile = () => {
                 {todayTasks.map((task, index) => (
                   <div key={index} className="task-item">
                     <div className="task-time">{task.time}</div>
-                    <div className="task-lecturer">{task.lecturer}</div>
+                    <div className="task-lecturer">{task.person}</div>
                     <div className="task-description">{task.task}</div>
                   </div>
                 ))}
@@ -235,4 +225,4 @@ const LecturerProfile = () => {
   )
 }
 
-export default LecturerProfile
+export default AdminProfile
