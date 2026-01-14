@@ -12,13 +12,11 @@ import toast from 'react-hot-toast'
 import { mockApi } from '../services/mockApi'
 import './Dashboard.css'
 
-const LecturerDashboard = () => {
+const LecturerOverview = () => {
   const navigate = useNavigate()
   const [currentTime, setCurrentTime] = useState(new Date())
-  const [activeTab, setActiveTab] = useState(0)
+  const [activeTab, setActiveTab] = useState(0) // Dashboard is active
   const [loading, setLoading] = useState(true)
-  const [courses, setCourses] = useState([])
-  const [upcomingSessions, setUpcomingSessions] = useState([])
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -32,62 +30,8 @@ const LecturerDashboard = () => {
     const loadLecturerData = async () => {
       try {
         setLoading(true)
-        
-        // Mock lecturer courses data
-        const mockCourses = [
-          { 
-            id: 'CS101', 
-            name: 'Introduction to Computer Science', 
-            students: 45, 
-            sessions: 12,
-            attendanceRate: 92
-          },
-          { 
-            id: 'CS201', 
-            name: 'Data Structures and Algorithms', 
-            students: 38, 
-            sessions: 15,
-            attendanceRate: 88
-          },
-          { 
-            id: 'CS301', 
-            name: 'Database Management Systems', 
-            students: 32, 
-            sessions: 10,
-            attendanceRate: 95
-          }
-        ]
-
-        // Mock upcoming sessions
-        const mockSessions = [
-          {
-            course: 'CS101',
-            name: 'Introduction to Programming',
-            date: '2026-01-09',
-            time: '09:00 AM',
-            location: 'Lab 101',
-            duration: '2 hours'
-          },
-          {
-            course: 'CS201',
-            name: 'Binary Trees and Graphs',
-            date: '2026-01-09',
-            time: '02:00 PM',
-            location: 'Room 205',
-            duration: '1.5 hours'
-          },
-          {
-            course: 'CS301',
-            name: 'SQL Queries and Optimization',
-            date: '2026-01-10',
-            time: '10:30 AM',
-            location: 'Lab 301',
-            duration: '2 hours'
-          }
-        ]
-
-        setCourses(mockCourses)
-        setUpcomingSessions(mockSessions)
+        // Simulate loading data
+        await new Promise(resolve => setTimeout(resolve, 500))
       } catch (error) {
         console.error('Error loading lecturer data:', error)
       } finally {
@@ -123,15 +67,6 @@ const LecturerDashboard = () => {
     }
 
     return `${day}${getOrdinalSuffix(day)} ${month} ${year}`
-  }
-
-  const formatDisplayDate = (dateString) => {
-    if (!dateString) return ''
-    const date = new Date(dateString)
-    const day = date.getDate()
-    const month = date.toLocaleDateString('en-US', { month: 'short' })
-    
-    return `${day} ${month}`
   }
 
   const sidebarItems = [
@@ -177,13 +112,6 @@ const LecturerDashboard = () => {
     }
   }
 
-  const getAttendanceRateColor = (rate) => {
-    if (rate >= 90) return 'excellent'
-    if (rate >= 80) return 'good'
-    if (rate >= 70) return 'warning'
-    return 'poor'
-  }
-
   if (loading) {
     return (
       <div className="admin-dashboard-container">
@@ -197,18 +125,18 @@ const LecturerDashboard = () => {
 
   return (
     <div className="admin-dashboard-container">
-      {/* Left Panel - Same as Landing Page */}
+      {/* Left Panel */}
       <div className="left-panel">
         <div className="brand-section">
           <h1 className="brand-title">ATTENDIQ</h1>
-          <p className="brand-subtitle">LECTURER DASHBOARD</p>
+          <p className="brand-subtitle">LECTURER OVERVIEW</p>
         </div>
         
         <div className="profile-section">
           <div className="profile-avatar">
             <User size={32} />
           </div>
-          <div className="profile-name">MALEESHA SANJANA</div>
+          <div className="profile-name">LECTURER</div>
         </div>
         
         <div className="time-widget">
@@ -222,12 +150,12 @@ const LecturerDashboard = () => {
         </div>
       </div>
 
-      {/* Main Content - Same structure as Landing Page */}
+      {/* Main Content */}
       <div className="main-content">
-        {/* Top Navigation - Same as Landing Page */}
+        {/* Top Navigation */}
         <nav className="top-nav">
           <div className="nav-left">
-            <span className="nav-item active">Dashboard</span>
+            <span className="nav-item active">Lecturer Overview</span>
             <span className="nav-arrow">➤</span>
           </div>
           <div className="nav-right">
@@ -235,7 +163,7 @@ const LecturerDashboard = () => {
           </div>
         </nav>
 
-        {/* Sidebar - Same as Landing Page */}
+        {/* Sidebar */}
         <div className="sidebar">
           {sidebarItems.map((item, index) => (
             <div
@@ -360,4 +288,4 @@ const LecturerDashboard = () => {
   )
 }
 
-export default LecturerDashboard
+export default LecturerOverview

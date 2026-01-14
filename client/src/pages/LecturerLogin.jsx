@@ -78,8 +78,8 @@ const LecturerLogin = () => {
       // Use admin credentials for lecturer login as requested
       const response = await mockApi.login(formData.username, formData.password, 'admin')
       toast.success('Login successful!')
-      // Redirect to lecturer dashboard after admin authentication
-      navigate('/lecturer-dashboard')
+      // Redirect to lecturer overview after admin authentication
+      navigate('/lecturer-overview')
     } catch (error) {
       toast.error(error.message || 'Login failed. Please try again.')
     } finally {

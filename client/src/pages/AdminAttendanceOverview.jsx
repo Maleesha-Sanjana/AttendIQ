@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import { 
   BarChart3,
   TrendingUp,
@@ -19,7 +18,7 @@ import { mockApi } from '../services/mockApi'
 import UserRegistration from '../components/UserRegistration'
 import './Dashboard.css'
 
-const AdminDashboard = () => {
+const AdminAttendanceOverview = () => {
   const navigate = useNavigate()
   const [currentTime, setCurrentTime] = useState(new Date())
   const [activeTab, setActiveTab] = useState(1) // Set to 1st icon (Dashboard/BarChart3)
@@ -29,11 +28,6 @@ const AdminDashboard = () => {
   const [selectedDate, setSelectedDate] = useState('') // Empty string to show all data by default
   const [loading, setLoading] = useState(true)
   const [showUserRegistration, setShowUserRegistration] = useState(false)
-  const [notifications, setNotifications] = useState([
-    { id: 1, message: 'New student registration pending approval', time: '5 min ago', type: 'info' },
-    { id: 2, message: 'Low attendance alert for Computing Faculty', time: '15 min ago', type: 'warning' },
-    { id: 3, message: 'System maintenance scheduled for tonight', time: '1 hour ago', type: 'info' }
-  ])
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -178,7 +172,6 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error('Logout error:', error)
       toast.error('Logout failed')
-      // Navigate anyway
       navigate('/')
     }
   }
@@ -217,18 +210,18 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard-container">
-      {/* Left Panel - Same as Landing Page */}
+      {/* Left Panel */}
       <div className="left-panel">
         <div className="brand-section">
           <h1 className="brand-title">ATTENDIQ</h1>
-          <p className="brand-subtitle">ADMIN DASHBOARD</p>
+          <p className="brand-subtitle">ATTENDANCE OVERVIEW</p>
         </div>
         
         <div className="profile-section">
           <div className="profile-avatar">
             <User size={32} />
           </div>
-          <div className="profile-name">MALEESHA SANJANA</div>
+          <div className="profile-name">ADMIN</div>
         </div>
         
         <div className="time-widget">
@@ -242,12 +235,12 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* Main Content - Same structure as Landing Page */}
+      {/* Main Content */}
       <div className="main-content">
-        {/* Top Navigation - Same as Landing Page */}
+        {/* Top Navigation */}
         <nav className="top-nav">
           <div className="nav-left">
-            <span className="nav-item active">Dashboard</span>
+            <span className="nav-item active">Attendance Overview</span>
             <span className="nav-arrow">➤</span>
           </div>
           <div className="nav-right">
@@ -268,7 +261,7 @@ const AdminDashboard = () => {
           </div>
         </nav>
 
-        {/* Sidebar - Same as Landing Page */}
+        {/* Sidebar */}
         <div className="sidebar">
           {sidebarItems.map((item, index) => (
             <div
@@ -281,7 +274,7 @@ const AdminDashboard = () => {
           ))}
         </div>
 
-        {/* Attendance Overview - Positioned like Face Recognition Area */}
+        {/* Attendance Overview */}
         <div className="attendance-area">
           <div className="attendance-overview">
             <div className="overview-header">
@@ -388,4 +381,4 @@ const AdminDashboard = () => {
   )
 }
 
-export default AdminDashboard
+export default AdminAttendanceOverview

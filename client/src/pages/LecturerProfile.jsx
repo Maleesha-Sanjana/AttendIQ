@@ -99,7 +99,7 @@ const LecturerProfile = () => {
 
   const handleSidebarClick = (index, label) => {
     if (index === 0) {
-      navigate('/lecturer-dashboard')
+      navigate('/lecturer-overview')
     } else if (label === 'Analytics' || label === 'Reports' || label === 'Settings') {
       // Show no access popup for restricted tabs
       toast.error('No access for you', {
