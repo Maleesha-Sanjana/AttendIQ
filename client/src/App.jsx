@@ -11,6 +11,7 @@ import AdminNotifications from './pages/AdminNotifications'
 import LecturerDashboard from './pages/LecturerDashboard'
 import LecturerOverview from './pages/LecturerOverview'
 import LecturerProfile from './pages/LecturerProfile'
+import LecturerNotifications from './pages/LecturerNotifications'
 import ReportGenerating from './pages/ReportGenerating'
 import AdminReportGenerating from './pages/AdminReportGenerating'
 import './App.css'
@@ -31,6 +32,7 @@ function App() {
         <Route path="/lecturer-dashboard" element={<LecturerDashboard />} />
         <Route path="/lecturer-overview" element={<LecturerOverview />} />
         <Route path="/lecturer-profile" element={<LecturerProfile />} />
+        <Route path="/lecturer-notifications" element={<LecturerNotifications />} />
         <Route path="/report-generating" element={<ReportGenerating />} />
         <Route path="/admin-report-generating" element={<AdminReportGenerating />} />
       </Routes>
