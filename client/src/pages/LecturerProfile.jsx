@@ -192,7 +192,7 @@ const LecturerProfile = () => {
                 item.label === 'Analytics' || item.label === 'Reports' 
                   ? 'restricted' 
                   : ''
-              }`}
+              } ${item.label === 'Notifications' ? 'notification' : ''}`}
               onClick={() => handleSidebarClick(index, item.label)}
             >
               <item.icon size={20} />
