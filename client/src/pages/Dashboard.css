@@ -904,6 +904,13 @@
   left: 0.5rem;
 }
 
+/* Position notification at the top */
+.sidebar-item.notification {
+  position: absolute;
+  top: 2rem;
+  left: 0.5rem;
+}
+
 .sidebar-item {
   width: 50px;
   height: 50px;
