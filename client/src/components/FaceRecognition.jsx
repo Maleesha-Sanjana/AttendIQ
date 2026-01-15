@@ -10,8 +10,117 @@ const FaceRecognition = ({ onAttendanceMarked }) => {
   const [cameraLoading, setCameraLoading] = useState(true)
   const [permissionRequested, setPermissionRequested] = useState(false)
   const [showPermissionHelper, setShowPermissionHelper] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
   const webcamRef = useRef(null)
   const streamRef = useRef(null)
+  const successAudioRef = useRef(null)
+  const failAudioRef = useRef(null)
+
+  // Initialize audio elements
+  useEffect(() => {
+    successAudioRef.current = new Audio('/successfully.mp3')
+    failAudioRef.current = new Audio('/tryagain.mp3')
+    
+    // Preload audio files
+    successAudioRef.current.preload = 'auto'
+    failAudioRef.current.preload = 'auto'
+    
+    // Handle audio loading errors
+    successAudioRef.current.onerror = () => {
+      console.warn('Could not load successfully.mp3 audio file')
+    }
+    failAudioRef.current.onerror = () => {
+      console.warn('Could not load tryagain.mp3 audio file')
+    }
+
+    return () => {
+      // Cleanup audio elements
+      if (successAudioRef.current) {
+        successAudioRef.current.pause()
+        successAudioRef.current = null
+      }
+      if (failAudioRef.current) {
+        failAudioRef.current.pause()
+        failAudioRef.current = null
+      }
+    }
+  }, [])
+
+  // Play success audio
+  const playSuccessAudio = useCallback(() => {
+    try {
+      if (successAudioRef.current) {
+        successAudioRef.current.currentTime = 0
+        successAudioRef.current.play().catch(error => {
+          console.warn('Could not play success audio:', error)
+        })
+      }
+    } catch (error) {
+      console.warn('Audio playback error:', error)
+    }
+  }, [])
+
+  // Play failure audio
+  const playFailureAudio = useCallback(() => {
+    try {
+      if (failAudioRef.current) {
+        failAudioRef.current.currentTime = 0
+        failAudioRef.current.play().catch(error => {
+          console.warn('Could not play failure audio:', error)
+        })
+      }
+    } catch (error) {
+      console.warn('Audio playback error:', error)
+    }
+  }, [])
+
+  // Simulate face recognition with audio feedback
+  const simulateFaceRecognition = useCallback(async () => {
+    if (isProcessing) return
+    
+    setIsProcessing(true)
+    
+    try {
+      // Simulate processing delay
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      
+      // Simulate random recognition result (80% success rate)
+      const isRecognized = Math.random() > 0.2
+      
+      if (isRecognized) {
+        // Face recognized successfully
+        playSuccessAudio()
+        
+        const mockStudentData = {
+          id: 'STU001',
+          name: 'John Doe',
+          timestamp: new Date().toISOString(),
+          confidence: 0.95
+        }
+        
+        onAttendanceMarked(mockStudentData)
+        
+        toast.success('Face recognized successfully!', {
+          duration: 3000,
+          icon: '✅'
+        })
+      } else {
+        // Face not recognized
+        playFailureAudio()
+        
+        toast.error('Face not recognized. Please try again.', {
+          duration: 3000,
+          icon: '❌'
+        })
+      }
+    } catch (error) {
+      console.error('Face recognition error:', error)
+      playFailureAudio()
+      toast.error('Recognition failed. Please try again.')
+    } finally {
+      setIsProcessing(false)
+    }
+  }, [isProcessing, onAttendanceMarked, playSuccessAudio, playFailureAudio])
 
   // Auto-request camera permission on component mount
   useEffect(() => {
@@ -258,11 +367,41 @@ const FaceRecognition = ({ onAttendanceMarked }) => {
               onUserMedia={onUserMedia}
               onUserMediaError={onUserMediaError}
             />
-            <div className="face-detection-overlay">
+            <div className={`face-detection-overlay ${isProcessing ? 'processing' : ''}`}>
               <div className="corner top-left"></div>
               <div className="corner top-right"></div>
               <div className="corner bottom-left"></div>
               <div className="corner bottom-right"></div>
+              
+              {isProcessing && (
+                <div className="processing-indicator">
+                  <div className="processing-spinner"></div>
+                  <p className="processing-text">Recognizing face...</p>
+                </div>
+              )}
+            </div>
+            
+            {/* Face Recognition Test Button */}
+            <div className="recognition-controls">
+              <motion.button
+                className={`recognition-btn ${isProcessing ? 'processing' : ''}`}
+                whileHover={{ scale: isProcessing ? 1 : 1.05 }}
+                whileTap={{ scale: isProcessing ? 1 : 0.95 }}
+                onClick={simulateFaceRecognition}
+                disabled={isProcessing}
+              >
+                {isProcessing ? (
+                  <>
+                    <div className="btn-spinner"></div>
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <Camera size={20} />
+                    Recognize Face
+                  </>
+                )}
+              </motion.button>
             </div>
           </div>
         )}
