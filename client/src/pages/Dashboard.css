@@ -1962,21 +1962,6 @@
   pointer-events: none;
 }
 
-.sidebar-item.restricted:hover::after {
-  content: '🚫';
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  font-size: 12px;
-  background: rgba(255, 68, 68, 0.9);
-  border-radius: 50%;
-  width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 /* Notification sidebar item styles */
 .sidebar-item.notification {
   position: absolute;

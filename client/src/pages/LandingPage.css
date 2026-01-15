@@ -369,7 +369,7 @@
     margin: 1rem 0;
   }
 }
-/* Restricted sidebar item styles for Landing Page */
+/* Restricted sidebar item styles for Landing Page - Updated */
 .sidebar-item.restricted {
   cursor: not-allowed;
   opacity: 0.6;
@@ -394,17 +394,5 @@
   pointer-events: none;
 }
 
-.sidebar-item.restricted:hover::after {
-  content: '🚫';
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  font-size: 12px;
-  background: rgba(255, 68, 68, 0.9);
-  border-radius: 50%;
-  width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+/* Red dot removed - no ::after element */
+
