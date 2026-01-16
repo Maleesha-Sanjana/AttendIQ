@@ -153,8 +153,18 @@ const LecturerProfile = () => {
         </div>
         
         <div className="profile-section">
-          <div className="profile-avatar">
-            <User size={32} />
+          <div className="profile-avatar" style={{
+            background: 'none',
+            padding: 0,
+            overflow: 'hidden'
+          }}>
+            <img src="/profile.jpg" alt="Profile" style={{ 
+              width: '80px', 
+              height: '80px', 
+              borderRadius: '50%', 
+              objectFit: 'cover',
+              display: 'block'
+            }} />
           </div>
           <div className="profile-name">MALEESHA SANJANA</div>
         </div>
@@ -206,8 +216,18 @@ const LecturerProfile = () => {
             {/* Profile Header Section */}
             <div className="profile-header-section">
               <div className="profile-main-info">
-                <div className="profile-avatar-large">
-                  <User size={80} />
+                <div className="profile-avatar-large" style={{
+                  background: 'none',
+                  padding: 0,
+                  overflow: 'hidden'
+                }}>
+                  <img src="/profile.jpg" alt="Profile" style={{ 
+                    width: '120px', 
+                    height: '120px', 
+                    borderRadius: '50%', 
+                    objectFit: 'cover',
+                    display: 'block'
+                  }} />
                 </div>
                 <div className="profile-details">
                   <h1 className="profile-full-name">MALEESHA SANJANA DILSHAN BULATHSINHALA</h1>
