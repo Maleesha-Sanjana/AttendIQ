@@ -108,8 +108,18 @@ const AdminOverview = () => {
         </div>
         
         <div className="profile-section">
-          <div className="profile-avatar">
-            <User size={32} />
+          <div className="profile-avatar" style={{
+            background: 'none',
+            padding: 0,
+            overflow: 'hidden'
+          }}>
+            <img src="/profile.jpg" alt="Profile" style={{ 
+              width: '80px', 
+              height: '80px', 
+              borderRadius: '50%', 
+              objectFit: 'cover',
+              display: 'block'
+            }} />
           </div>
           <div className="profile-name">Maleesha Sanjana</div>
         </div>

@@ -166,7 +166,7 @@ const LecturerProfile = () => {
               display: 'block'
             }} />
           </div>
-          <div className="profile-name">MALEESHA SANJANA</div>
+          <div className="profile-name">Maleesha Sanjana</div>
         </div>
         
         <div className="time-widget">
