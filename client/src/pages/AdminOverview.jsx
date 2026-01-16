@@ -167,7 +167,6 @@ const AdminOverview = () => {
               <div className="lecturer-stat-card">
                 <div className="stat-value">980</div>
                 <div className="stat-label">On Time</div>
-                <div className="stat-sublabel">18% more than yesterday</div>
                 <div className="stat-icon-corner">
                   <BarChart3 size={20} />
                 </div>
@@ -176,7 +175,6 @@ const AdminOverview = () => {
               <div className="lecturer-stat-card">
                 <div className="stat-value">185</div>
                 <div className="stat-label">Late Arrival</div>
-                <div className="stat-sublabel">8% less than yesterday</div>
                 <div className="stat-icon-corner">
                   <TrendingUp size={20} />
                 </div>
@@ -185,7 +183,6 @@ const AdminOverview = () => {
               <div className="lecturer-stat-card">
                 <div className="stat-value">80</div>
                 <div className="stat-label">Absent</div>
-                <div className="stat-sublabel">5% less than yesterday</div>
                 <div className="stat-icon-corner">
                   <FileText size={20} />
                 </div>
