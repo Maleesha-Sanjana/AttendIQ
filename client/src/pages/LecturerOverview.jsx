@@ -198,7 +198,6 @@ const LecturerOverview = () => {
               <div className="lecturer-stat-card">
                 <div className="stat-value">360</div>
                 <div className="stat-label">On Time</div>
-                <div className="stat-sublabel">24% more than yesterday</div>
                 <div className="stat-icon-corner">
                   <BarChart3 size={20} />
                 </div>
@@ -207,7 +206,6 @@ const LecturerOverview = () => {
               <div className="lecturer-stat-card">
                 <div className="stat-value">62</div>
                 <div className="stat-label">Late Arrival</div>
-                <div className="stat-sublabel">12% less than yesterday</div>
                 <div className="stat-icon-corner">
                   <TrendingUp size={20} />
                 </div>
@@ -216,7 +214,6 @@ const LecturerOverview = () => {
               <div className="lecturer-stat-card">
                 <div className="stat-value">6</div>
                 <div className="stat-label">Early Departures</div>
-                <div className="stat-sublabel">2% less than yesterday</div>
                 <div className="stat-icon-corner">
                   <FileText size={20} />
                 </div>
