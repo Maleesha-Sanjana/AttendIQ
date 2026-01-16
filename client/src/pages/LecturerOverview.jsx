@@ -16,30 +16,12 @@ const LecturerOverview = () => {
   const navigate = useNavigate()
   const [currentTime, setCurrentTime] = useState(new Date())
   const [activeTab, setActiveTab] = useState(1) // Dashboard is active (index 1)
-  const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date())
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [])
-
-  useEffect(() => {
-    const loadLecturerData = async () => {
-      try {
-        setLoading(true)
-        // Simulate loading data
-        await new Promise(resolve => setTimeout(resolve, 500))
-      } catch (error) {
-        console.error('Error loading lecturer data:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadLecturerData()
   }, [])
 
   const formatTime = (date) => {
@@ -112,17 +94,6 @@ const LecturerOverview = () => {
       toast.error('Logout failed')
       navigate('/')
     }
-  }
-
-  if (loading) {
-    return (
-      <div className="admin-dashboard-container">
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <p>Loading dashboard...</p>
-        </div>
-      </div>
-    )
   }
 
   return (

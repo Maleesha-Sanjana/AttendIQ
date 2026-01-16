@@ -317,10 +317,6 @@ const AdminLogin = () => {
                 {isLoading ? 'Signing In...' : 'Sign In'}
               </motion.button>
             </form>
-
-            <div className="login-footer">
-              <p>Demo credentials: admin / admin123</p>
-            </div>
           </motion.div>
         </div>
       </div>
