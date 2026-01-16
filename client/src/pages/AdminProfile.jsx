@@ -141,8 +141,18 @@ const AdminProfile = () => {
         </div>
         
         <div className="profile-section">
-          <div className="profile-avatar">
-            <User size={32} />
+          <div className="profile-avatar" style={{
+            background: 'none',
+            padding: 0,
+            overflow: 'hidden'
+          }}>
+            <img src="/profile.jpg" alt="Profile" style={{ 
+              width: '80px', 
+              height: '80px', 
+              borderRadius: '50%', 
+              objectFit: 'cover',
+              display: 'block'
+            }} />
           </div>
           <div className="profile-name">Maleesha Sanjana</div>
         </div>
@@ -191,10 +201,17 @@ const AdminProfile = () => {
             <div className="profile-header-section">
               <div className="profile-main-info">
                 <div className="profile-avatar-large" style={{
-                  background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-                  boxShadow: '0 10px 30px rgba(79, 172, 254, 0.3)'
+                  background: 'none',
+                  padding: 0,
+                  overflow: 'hidden'
                 }}>
-                  <User size={80} />
+                  <img src="/profile.jpg" alt="Profile" style={{ 
+                    width: '120px', 
+                    height: '120px', 
+                    borderRadius: '50%', 
+                    objectFit: 'cover',
+                    display: 'block'
+                  }} />
                 </div>
                 <div className="profile-details">
                   <h1 className="profile-full-name">Maleesha Sanjan Dilshan Bulathsinhala</h1>
