@@ -15,7 +15,7 @@ import './Dashboard.css'
 const LecturerOverview = () => {
   const navigate = useNavigate()
   const [currentTime, setCurrentTime] = useState(new Date())
-  const [activeTab, setActiveTab] = useState(0) // Dashboard is active
+  const [activeTab, setActiveTab] = useState(1) // Dashboard is active (index 1)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
