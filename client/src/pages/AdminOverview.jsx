@@ -114,8 +114,8 @@ const AdminOverview = () => {
             overflow: 'hidden'
           }}>
             <img src="/profile.jpg" alt="Profile" style={{ 
-              width: '80px', 
-              height: '80px', 
+              width: '120px', 
+              height: '120px', 
               borderRadius: '50%', 
               objectFit: 'cover',
               display: 'block'
