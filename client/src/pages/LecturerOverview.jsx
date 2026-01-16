@@ -138,7 +138,7 @@ const LecturerOverview = () => {
           <div className="profile-avatar">
             <User size={32} />
           </div>
-          <div className="profile-name">LECTURER</div>
+          <div className="profile-name">Maleesha Sanjana</div>
         </div>
         
         <div className="time-widget">
