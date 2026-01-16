@@ -144,7 +144,7 @@ const AdminProfile = () => {
           <div className="profile-avatar">
             <User size={32} />
           </div>
-          <div className="profile-name">ADMIN</div>
+          <div className="profile-name">Maleesha Sanjana</div>
         </div>
         
         <div className="time-widget">
@@ -197,7 +197,7 @@ const AdminProfile = () => {
                   <User size={80} />
                 </div>
                 <div className="profile-details">
-                  <h1 className="profile-full-name">SYSTEM ADMINISTRATOR</h1>
+                  <h1 className="profile-full-name">Maleesha Sanjan Dilshan Bulathsinhala</h1>
                   <p className="profile-position">ADMIN</p>
                   <p className="profile-faculty">ATTENDIQ SYSTEM</p>
                   <p className="profile-campus">CINEC CAMPUS</p>
